@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ανάλυση κωδικοποίησης καλωδίου</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --muted: #94a3b8;
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --danger: #ef4444;
+    }
+    html,body{height:100%}
+    body{
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial;
+      margin:0; color:#e5e7eb; background: radial-gradient(1200px 600px at 10% 0%, #0b1220 0%, var(--bg) 40%, #0b1220 100%);
+    }
+    .container{max-width:1000px;margin:0 auto;padding:32px}
+    .card{background:linear-gradient(180deg,#111827 0%,#0b1220 100%);border:1px solid #1f2937;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .header{display:flex;gap:12px;align-items:center;justify-content:space-between;padding:20px 24px;border-bottom:1px solid #1f2937;flex-wrap:wrap}
+    h1{font-size:22px;margin:0;letter-spacing:.2px}
+    h2{margin:4px 0 0 0;font-size:20px;font-weight:800;color:#ffffff}
+    .muted{color:var(--muted)}
+    .controls{display:flex;gap:10px;flex-wrap:wrap}
+    input[type="text"]{
+      background:#0b1220;border:1px solid #1f2937;border-radius:12px;padding:14px 16px;color:#e5e7eb;min-width:280px;font-size:16px;outline:none;box-shadow: inset 0 0 0 9999px rgba(255,255,255,0);
+    }
+    input[type="text"]:focus{border-color:#334155;}
+    button{cursor:pointer;border:0;border-radius:12px;padding:14px 18px;font-weight:600}
+    .btn-primary{background:linear-gradient(90deg,var(--accent) 0%, #16a34a 100%);color:#052e16}
+    .btn-ghost{background:#0b1220;color:#e5e7eb;border:1px solid #1f2937}
+
+    .grid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:14px;padding:18px}
+    @media (min-width: 860px){.grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+
+    .chip{display:inline-flex;align-items:center;gap:8px;border:1px solid #1f2937;background:#0b1220;border-radius:999px;padding:8px 12px;color:#e5e7eb;font-weight:600}
+    .chip b{color:var(--accent-2)}
+    .row{border:1px solid #1f2937;border-radius:14px;padding:14px;background:#0b1220}
+    .row h3{margin:0 0 4px 0;font-size:15px;color:#cbd5e1}
+    .row p{margin:0;font-size:14px;color:#b6c2d1}
+
+    .examples{display:flex;flex-wrap:wrap;gap:8px;padding:0 18px 18px}
+    .example{border:1px dashed #334155;border-radius:10px;padding:8px 10px;font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;background:#0b1220;color:#cbd5e1;cursor:pointer}
+    .example:hover{border-style:solid}
+
+    .error{padding:12px 16px;margin:18px;border-left:4px solid var(--danger);background:#1b1111;color:#fecaca;border-radius:10px}
+    .success{padding:12px 16px;margin:18px;border-left:4px solid var(--accent);background:#0f2a1b;color:#dcfce7;border-radius:10px}
+    footer{color:#64748b;text-align:center;font-size:12px;margin-top:18px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card">
+      <div class="header">
+        <div>
+          <h1>Ανάλυση συμβόλων κωδικοποίησης καλωδίου</h1>
+          <h2><strong>Ε. Κοκκώδης</strong></h2>
+          <div class="muted">Σύμφωνα με τα πρότυπα ΕΛΟΤ/IEC του παραδείγματος (π.χ. <b>H05VV-F</b>).</div>
+        </div>
+        <div class="controls">
+          <input id="code" type="text" placeholder="Πληκτρολογήστε κωδικοποίηση, π.χ. H05VV-F" />
+          <button class="btn-primary" id="analyze">Ανάλυση</button>
+          <button class="btn-ghost" id="clear">Καθαρισμός</button>
+        </div>
+      </div>
+
+      <div id="chips" style="padding:12px 18px;display:none"></div>
+      <div id="result" class="grid"></div>
+      <div id="msg"></div>
+
+      <div class="examples">
+        <span class="muted" style="width:100%;margin-bottom:4px">Παραδείγματα: πατήστε για αυτόματη συμπλήρωση</span>
+        <div class="example">H05VV-F</div>
+        <div class="example">A07RN-F</div>
+        <div class="example">J1VVR-U</div>
+        <div class="example">H03VVH2-F</div>
+        <div class="example">H05V2V2-F</div>
+      </div>
+    </div>
+
+    <footer>Δεν πρόκειται για επίσηκη τεκμηρίωση· χρησιμεύει ως εκπαιδευτική προσομοίωση.</footer>
+  </div>
+
+<script>
+(function(){
+  const firstSymbol = {
+    'H': 'Καλώδιο σύμφωνα με εναρμονισμένα πρότυπα (π.χ. γερμανικά, αγγλικά κ.λπ.)',
+    'A': 'Αναγνωρισμένος εθνικός τύπος',
+    'J': 'Καλώδιο σύμφωνα με πρότυπα I.E.C. (International Electrotechnical Commission)'
+  };
+
+  const voltages = {
+    '1':  '600/1000 V',
+    '07': '450/750 V',
+    '05': '300/500 V',
+    '03': '300/300 V'
+  };
+
+  const insulation = {
+    'V': 'PVC – Πολυβινυλοχλωρίδιο',
+    'R': 'Ελαστικό',
+    'S': 'Σιλικόνη'
+  };
+
+  const sheath = {
+    'V': 'PVC – Πολυβινυλοχλωρίδιο',
+    'R': 'Ελαστικό',
+    'N': 'Νεοπρένιο'
+  };
+
+  const special = {
+    'H2': 'Πεπλατυσμένη κατασκευή καλωδίου, οι πόλοι δεν μπορούν να αποχωριστούν',
+    'H':  'Πεπλατυσμένη κατασκευή καλωδίου, οι πόλοι μπορούν να αποχωριστούν'
+  };
+
+  const conductorType = {
+    'U': 'Δύσκαμπτος στρογγυλός αγωγός, μονόκλωνος',
+    'R': 'Δύσκαμπτος στρογγυλός αγωγός, πολύκλωνος',
+    'S': 'Δύσκαμπτος αγωγός σχήματος κυκλικού τομέα',
+    'H': 'Υπερ-εύκαμπτος αγωγός (ομάδα 6)',
+    'F': 'Εύκαμπτος αγωγός',
+    'K': 'Εύκαμπτος αγωγός για μόνιμη τοποθέτηση'
+  };
+
+  function chip(label, value){
+    const el = document.createElement('span');
+    el.className = 'chip';
+    el.innerHTML = `<b>${label}</b> ${value}`;
+    return el;
+  }
+  function row(title, text){
+    const el = document.createElement('div');
+    el.className = 'row';
+    el.innerHTML = `<h3>${title}</h3><p>${text}</p>`;
+    return el;
+  }
+
+  function parse(codeRaw){
+    const code = codeRaw.replace(/\s+/g,'').toUpperCase();
+    if(!code) return {ok:false, reason:'Δώστε μια κωδικοποίηση καλωδίου.'};
+
+    const re = /^(H|A|J)(?:-)?(1|03|05|07)([VRS])([VRN](?:2)?)?(?:-)?(H2|H)?(?:-)?([URSHFK])?$/i;
+    const m = code.match(re);
+    if(!m) return {ok:false, reason:'Η μορφή δεν αναγνωρίστηκε. Δοκιμάστε π.χ. H05VV-F ή A07RN-F.'};
+
+    const [, s1, s2, s3, s4, s5, s6] = m;
+
+    const parts = [];
+    parts.push({label:'1ο σύμβολο', value:s1, text:firstSymbol[s1] || '—'});
+    parts.push({label:'Τάση λειτουργίας U₀/U', value:s2, text: voltages[s2] ? `Ονομαστική τάση ${voltages[s2]}.` : '—'});
+
+    if(s3){ parts.push({label:'Υλικό μόνωσης αγωγών', value:s3, text: insulation[s3] || '—'}); }
+    if(s4){
+      const base = s4.replace('2','');
+      let t = sheath[base] || '—';
+      if(/2$/.test(s4)) t += ' (βελτιωμένη θερμική κατηγορία)';
+      parts.push({label:'Υλικό μανδύα', value:s4, text: t});
+    }
+    if(s5){ parts.push({label:'Ειδική διάκριση', value:s5, text: special[s5] || '—'}); }
+    if(s6){ parts.push({label:'Είδος αγωγού (τελευταίο σύμβολο)', value:s6, text: conductorType[s6] || '—'}); }
+
+    return {ok:true, parts, normalized: code};
+  }
+
+  function render(result){
+    const res = document.getElementById('result');
+    const chips = document.getElementById('chips');
+    const msg = document.getElementById('msg');
+    res.innerHTML = ''; msg.innerHTML = ''; chips.innerHTML = '';
+
+    if(!result.ok){
+      msg.innerHTML = `<div class="error">${result.reason}</div>`;
+      chips.style.display = 'none';
+      return;
+    }
+
+    chips.style.display = 'block';
+    chips.appendChild(chip('Κωδικός', result.normalized));
+    result.parts.forEach(p=> chips.appendChild(chip(p.label, p.value||'—')));
+
+    result.parts.forEach(p=> res.appendChild(row(`${p.label}: <code>${p.value||'—'}</code>`, p.text)));
+
+    msg.innerHTML = `<div class="success">Η ανάλυση ολοκληρώθηκε.</div>`;
+  }
+
+  const input = document.getElementById('code');
+  document.getElementById('analyze').addEventListener('click', ()=> render(parse(input.value)) );
+  document.getElementById('clear').addEventListener('click', ()=>{ input.value=''; document.getElementById('result').innerHTML=''; document.getElementById('chips').style.display='none'; document.getElementById('msg').innerHTML=''; input.focus(); });
+  input.addEventListener('keydown', (e)=>{ if(e.key==='Enter'){ render(parse(input.value)); }});
+  document.querySelectorAll('.example').forEach(el=> el.addEventListener('click', ()=>{ input.value = el.textContent.trim(); render(parse(input.value)); }));
+})();
+</script>
+</body>
+</html>
