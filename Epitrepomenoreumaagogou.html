@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Υπολογισμός επιτρεπόμενου ρεύματος αγωγού</title>
+  <style>
+    :root{
+      --bg:#0f172a;--panel:#0b1220;--border:#1f2937;--text:#e5e7eb;--muted:#94a3b8;--accent:#22c55e;--warn:#f59e0b;--danger:#ef4444
+    }
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(1200px 600px at 10% 0%, #0b1220 0%, #0f172a 40%, #0b1220 100%);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Cantarell,Noto Sans,Helvetica,Arial}
+    .wrap{max-width:1000px;margin:0 auto;padding:28px}
+    .card{background:linear-gradient(180deg,#0b1220 0%,#0b1424 100%);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .header{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:18px 22px;border-bottom:1px solid var(--border)}
+    h1{margin:0;font-size:24px;font-weight:700}
+    h2{margin:6px 0 0 0;font-size:20px;font-weight:800;color:#ffffff}
+    .muted{color:var(--muted)}
+    .grid{display:grid;grid-template-columns:1fr;gap:14px;padding:18px}
+    @media (min-width:860px){.grid{grid-template-columns:1fr 1fr}}
+    .row{display:flex;flex-direction:column;gap:8px}
+    label{font-weight:600;color:#cbd5e1}
+    select,input{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:12px 14px;color:var(--text);outline:none;font-size:16px}
+    input[type=number]{appearance:textfield}
+    .result{border-top:1px solid var(--border);padding:14px 18px}
+    .badge{display:inline-block;border:1px solid var(--border);background:#0b1220;padding:6px 10px;border-radius:999px;margin-right:8px}
+    .big{font-size:40px;font-weight:800;letter-spacing:.5px}
+    .units{color:var(--muted);font-weight:600}
+    .box{border:1px solid var(--border);border-radius:14px;padding:14px;background:#0b1220}
+    .ok{border-left:4px solid var(--accent)}
+    .warn{border-left:4px solid var(--warn)}
+    .danger{border-left:4px solid var(--danger)}
+    table{width:100%;border-collapse:collapse;margin-top:6px}
+    td,th{border-bottom:1px dashed #1f2937;padding:8px;text-align:left;font-size:14px}
+    code{background:#0b1220;border:1px solid #1f2937;border-radius:6px;padding:2px 6px}
+    footer{color:#64748b;text-align:center;font-size:12px;margin-top:14px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <div>
+          <h1>Υπολογισμός επιτρεπόμενου ρεύματος αγωγού</h1>
+          <h2><strong>Ε. Κοκκώδης</strong></h2>
+          <div class="muted">Βάση Πιν. 2.3β, 2.3γ, 2.3δ – θερμοκρασία περιβάλλοντος & αριθμός ενεργών αγωγών στο ίδιο περίβλημα.</div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="row">
+          <label for="area">Διατομή αγωγού (mm²)</label>
+          <select id="area">
+            <option value="1">1</option>
+            <option value="1.5">1,5</option>
+            <option value="2.5">2,5</option>
+            <option value="4">4</option>
+            <option value="6">6</option>
+            <option value="10">10</option>
+            <option value="16">16</option>
+            <option value="25">25</option>
+            <option value="35">35</option>
+            <option value="50">50</option>
+          </select>
+          <small class="muted">Αφορά χάλκινους αγωγούς με μόνωση – θερμοκρασία αναφοράς 30°C (Αγωγοί 1ης Ομάδας).</small>
+        </div>
+
+        <div class="row">
+          <label for="temp">Θερμοκρασία περιβάλλοντος (°C)</label>
+          <select id="temp">
+            <option value="30">30</option>
+            <option value="35">35</option>
+            <option value="40">40</option>
+            <option value="45">45</option>
+            <option value="50">50</option>
+            <option value="55">55</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label for="active">Αριθμός ενεργών αγωγών στο ίδιο περίβλημα</label>
+          <input id="active" type="number" min="1" value="3" />
+          <small class="muted">Για ≤3 αγωγούς δεν εφαρμόζεται διόρθωση ομάδας.</small>
+        </div>
+
+        <div class="row">
+          <label>Βασικό ρεύμα από πίνακα 2.3β</label>
+          <div id="ibase" class="box">—</div>
+        </div>
+      </div>
+
+      <div class="result">
+        <div class="box ok" id="out">
+          <div class="big" id="iamps">—</div>
+          <div class="units">Α (τελικό επιτρεπόμενο ρεύμα)</div>
+          <table>
+            <tbody>
+              <tr><th>Συντελεστής θερμοκρασίας (Πιν. 2.3γ)</th><td id="ftemp">—</td></tr>
+              <tr><th>Συντελεστής ομάδας (Πιν. 2.3δ)</th><td id="fgroup">—</td></tr>
+              <tr><th>Υπολογισμός</th><td id="calc">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div id="note" class="muted" style="padding:10px 18px"></div>
+      </div>
+    </div>
+
+    <footer>Εκπαιδευτική προσομοίωση – δεν αντικαθιστά επίσηνα πρότυπα/κανονισμούς. Για τιμές εκτός πινάκων απαιτείται τεχνική κρίση.</footer>
+  </div>
+
+<script>
+(function(){
+  const baseCurrents = {'1':11,'1.5':14,'2.5':20,'4':25,'6':33,'10':46,'16':60,'25':83,'35':100,'50':127};
+  const tempFactor = {30:1.00,35:0.91,40:0.82,45:0.71,50:0.58,55:0.41};
+  function groupFactor(n){
+    if(n<=3) return {k:1.0,label:'≤3 αγωγοί – χωρίς διόρθωση'};
+    if(n>=4&&n<=6) return {k:0.8,label:'4–6 αγωγοί'};
+    if(n>=7&&n<=9) return {k:0.7,label:'7–9 αγωγοί'};
+    return {k:0.7,label:'>9 αγωγοί (εκτός πίνακα – χρησιμοποιήθηκε τιμή για 7–9)'};
+  }
+  const $=id=>document.getElementById(id);
+  const area=$('area');const temp=$('temp');const active=$('active');
+  function recalc(){
+    const a=area.value;const T=Number(temp.value);const n=Number(active.value||0);
+    const I0=baseCurrents[a];$('ibase').textContent=I0?`${I0} A`:'—';
+    const fT=tempFactor[T]??1;const g=groupFactor(n);
+    $('ftemp').textContent=fT.toLocaleString('el-GR');$('fgroup').textContent=`${g.k.toLocaleString('el-GR')}  (${g.label})`;
+    let msg='';if(n>9)msg='Προσοχή: ο αριθμός αγωγών είναι εκτός εύρους του Πιν. 2.3δ. Η τιμή 0,7 χρησιμοποιείται συντηρητικά.';$('note').textContent=msg;
+    if(!I0){$('iamps').textContent='—';$('calc').textContent='—';return;}
+    const I=I0*fT*g.k;$('iamps').textContent=I.toFixed(2).replace('.',',');$('calc').innerHTML=`<code>I = ${I0} × ${fT} × ${g.k} = ${I.toFixed(2)} A</code>`;
+  }
+  [area,temp,active].forEach(el=>el.addEventListener('input',recalc));
+  recalc();
+})();
+</script>
+</body>
+</html>
