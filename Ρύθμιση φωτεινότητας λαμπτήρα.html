@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="el">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Προσομοίωση: Λαμπτήρας & Ρυθμιστής Φωτεινότητας</title>
+  <style>
+    :root{
+      --level: 70;              /* 0–100 */
+      --brightness: 0.7;        /* 0.1–1.0 */
+      --glow-alpha: 0.6;        /* 0–1 */
+      --bg: #0f1322;
+      --panel: #1a2036;
+      --text: #e8ebff;
+      --accent: #7aa2ff;
+    }
+
+    *{ box-sizing: border-box; }
+    html, body{ height:100%; }
+    body{
+      margin:0; background: radial-gradient(1200px 600px at 50% 30%, #161b2b 0%, var(--bg) 60%);
+      color: var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      display:grid; place-items:center; padding: 24px;
+    }
+
+    .app{ width:min(900px, 100%); display:grid; gap:18px; }
+
+    .card{
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0));
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px; padding: 18px 20px; backdrop-filter: blur(6px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+
+    h1{ font-size: clamp(1.2rem, 1rem + 1.2vw, 1.8rem); margin: 0 0 6px; }
+    p{ margin: 0; opacity: .8; }
+
+    .scene{
+      position: relative; height: 340px; display:grid; place-items:center;
+      border-radius: 16px; overflow:hidden; background: radial-gradient(600px 260px at 50% 20%, rgba(255,255,200,var(--glow-alpha)), rgba(255,255,200,0) 60%),
+        linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0));
+      border:1px solid rgba(255,255,255,0.08);
+    }
+
+    .bulb{ filter: brightness(var(--brightness)); transition: filter .12s linear; }
+
+    .wire{
+      position:absolute; top:0; left:50%; transform:translateX(-50%);
+      width:4px; height:130px; background: linear-gradient(#2a3047, #0b0e19);
+    }
+
+    .glow{
+      position:absolute; inset:-40%; pointer-events:none;
+      background: radial-gradient(500px 200px at 50% 18%, rgba(255, 241, 120, calc(var(--glow-alpha) * .8)), rgba(255,241,120,0) 60%);
+      mix-blend-mode: screen; transition: opacity .12s linear;
+    }
+
+    .controls{ display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
+
+    .slider{
+      -webkit-appearance:none; appearance:none; width: min(520px, 100%); height: 10px; border-radius: 999px;
+      background: linear-gradient(90deg, #fdf3a5 0%, #ffe066 50%, #ffd43b 100%);
+      outline: none; opacity:.95; transition: opacity .2s; border:1px solid rgba(255,255,255,0.25);
+    }
+    .slider:hover{ opacity:1; }
+
+    .slider::-webkit-slider-thumb{ -webkit-appearance:none; appearance:none; width: 24px; height:24px; border-radius:50%; background: var(--accent); border:2px solid white; box-shadow:0 2px 8px rgba(0,0,0,.35); cursor:pointer; }
+    .slider::-moz-range-thumb{ width: 24px; height:24px; border-radius:50%; background: var(--accent); border:2px solid white; box-shadow:0 2px 8px rgba(0,0,0,.35); cursor:pointer; }
+
+    .badge{ font-variant-numeric: tabular-nums; background: #101425; border:1px solid rgba(255,255,255,.12); padding:6px 10px; border-radius: 999px; }
+    label{ font-weight:600; letter-spacing:.2px; }
+
+    .hint{ font-size: 0.9rem; opacity:.8; }
+
+    .focus-ring:focus-visible{ outline: 3px solid #7aa2ff; outline-offset: 3px; border-radius: 12px; }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="card">
+      <h1>Προσομοίωση λαμπτήρα</h1>
+      <p class="hint">Μετακίνησε το ρυθμιστικό για να αλλάξεις τη φωτεινότητα του λαμπτήρα.</p>
+    </section>
+
+    <section class="scene card focus-ring" tabindex="0" aria-label="Σκηνή με λαμπτήρα που αλλάζει φωτεινότητα">
+      <div class="wire" aria-hidden="true"></div>
+      <div class="glow" aria-hidden="true"></div>
+
+      <!-- SVG λαμπτήρας χωρίς κάλυκα -->
+      <svg class="bulb" width="180" height="200" viewBox="0 0 180 200" role="img" aria-label="Λαμπτήρας">
+        <defs>
+          <radialGradient id="bulbGlow" cx="50%" cy="35%" r="60%">
+            <stop offset="0%" stop-color="#fff8b0" />
+            <stop offset="60%" stop-color="#ffe066" />
+            <stop offset="100%" stop-color="#ffd43b" />
+          </radialGradient>
+        </defs>
+        <!-- Μόνο γυάλινο μέρος -->
+        <ellipse cx="90" cy="95" rx="68" ry="72" fill="url(#bulbGlow)" stroke="#f8e79a" stroke-width="2"/>
+        <!-- Φιλαμέντο (στυλιζαρισμένο) -->
+        <path d="M64 116 C 76 106, 104 106, 116 116" stroke="#8a5a00" stroke-width="3" fill="none"/>
+      </svg>
+    </section>
+
+    <section class="card" aria-label="Πίνακας ελέγχου φωτεινότητας">
+      <div class="controls">
+        <label for="intensity">Φωτεινότητα</label>
+        <input id="intensity" class="slider" type="range" min="0" max="100" step="1" value="70" aria-valuemin="0" aria-valuemax="100" aria-valuenow="70" aria-label="Φωτεινότητα λαμπτήρα (0 έως 100)" />
+        <span id="value" class="badge" aria-live="polite">70%</span>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const slider = document.getElementById('intensity');
+    const valueEl = document.getElementById('value');
+    const root = document.documentElement;
+
+    function applyLevel(v){
+      const brightness = 0.1 + (v/100) * 0.9;
+      const glowAlpha = (v/100) * 0.75;
+
+      root.style.setProperty('--level', v);
+      root.style.setProperty('--brightness', brightness.toFixed(3));
+      root.style.setProperty('--glow-alpha', glowAlpha.toFixed(3));
+
+      valueEl.textContent = `${v}%`;
+      slider.setAttribute('aria-valuenow', String(v));
+    }
+
+    applyLevel(parseInt(slider.value, 10));
+
+    slider.addEventListener('input', (e) => {
+      applyLevel(parseInt(e.target.value, 10));
+    });
+
+    slider.addEventListener('keydown', (e)=>{
+      if(e.key === 'PageUp'){ e.preventDefault(); slider.value = Math.min(100, parseInt(slider.value,10)+5); slider.dispatchEvent(new Event('input')); }
+      if(e.key === 'PageDown'){ e.preventDefault(); slider.value = Math.max(0, parseInt(slider.value,10)-5); slider.dispatchEvent(new Event('input')); }
+    });
+  </script>
+</body>
+</html>
