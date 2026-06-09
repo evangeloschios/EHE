@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Προσομοίωση Λαμπτήρα: Τάση, Ρεύμα, Ισχύς & Φωτεινότητα</title>
+  <style>
+    :root{
+      --bg:#0f172a;
+      --card:#111827;
+      --muted:#94a3b8;
+      --text:#e5e7eb;
+      --accent:#22d3ee;
+      --good:#10b981;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --glow:#fde68a; /* amber-200 */
+    }
+    *{box-sizing:border-box}
+    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,"Noto Sans",sans-serif;background:radial-gradient(1200px 600px at 50% -10%,#1f2937 0%, var(--bg) 50%);}    
+    .wrap{max-width:1200px;margin:0 auto;padding:24px;}
+    h1{color:var(--text);font-weight:800;letter-spacing:.2px;margin:0 0 8px}
+    p.lead{color:var(--muted);margin:0 0 20px}
+
+    .grid{display:grid;gap:18px;grid-template-columns:repeat(12,1fr)}
+    .card{background:linear-gradient(180deg,rgba(255,255,255,.03),rgba(255,255,255,.01));border:1px solid rgba(255,255,255,.06);box-shadow:0 10px 30px rgba(0,0,0,.35);backdrop-filter: blur(4px);border-radius:18px;padding:16px;color:var(--text)}
+    .controls{grid-column:span 5}
+    .meters{grid-column:span 7;display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+    .meter-card{grid-column:span 6}
+    .bulb-card{grid-column:span 12;display:grid;grid-template-columns:repeat(12,1fr);gap:14px;align-items:center}
+
+    label{display:flex;justify-content:space-between;gap:12px;color:var(--muted);font-size:14px;margin:8px 0 6px}
+    .row{display:flex;gap:10px;align-items:center}
+    input[type="range"]{width:100%}
+    input[type="number"]{width:120px;background:#0b1220;border:1px solid rgba(255,255,255,.1);color:var(--text);border-radius:10px;padding:8px}
+
+    .kv{display:grid;grid-template-columns: 1fr auto;gap:6px;margin-top:10px}
+    .kv .k{color:var(--muted)}
+    .kv .v{font-variant-numeric:tabular-nums;font-weight:700}
+
+    .badge{display:inline-flex;align-items:center;gap:6px;border:1px solid rgba(255,255,255,.12);padding:6px 10px;border-radius:999px;font-size:12px;color:var(--muted)}
+
+    .gauge{position:relative;height:140px}
+    .gauge svg{width:100%;height:100%}
+    .needle{transform-origin:50% 85%;transition:transform .25s ease}
+    .readout{position:absolute;inset:auto 0 6px 0;text-align:center;font-weight:700}
+
+    .scene{position:relative;display:flex;justify-content:center;align-items:center;min-height:360px;background:radial-gradient(980px 360px at 50% 120%, rgba(255,255,255,.06), transparent 70%);border-radius:14px;border:1px dashed rgba(255,255,255,.08);overflow:hidden}
+    .power-display{position:absolute;top:12px;left:0;right:0;text-align:center;font-weight:900;font-size:1.8rem;color:var(--glow);letter-spacing:0.5px;text-shadow:0 0 6px rgba(253,230,138,.75), 0 0 18px rgba(253,230,138,.45), 0 0 36px rgba(253,230,138,.25)}
+
+    .bulb{position:relative;width:150px;height:210px;border-radius:60px 60px 45px 45px/75px 75px 85px 85px;background:linear-gradient(180deg,#f9fafb 0%, #d1d5db 70%, #9ca3af 100%);box-shadow:inset 0 -10px 25px rgba(0,0,0,.25)}
+    .bulb::after{content:"";position:absolute;left:50%;top:40%;translate:-50% -50%;width:220px;height:220px;border-radius:50%;filter:blur(34px);background:radial-gradient(circle, rgba(255,240,200,.95), rgba(255,190,80,.45) 40%, rgba(255,170,0,.25) 55%, rgba(255,150,0,.15) 70%, transparent 75%);opacity: var(--halo, 0);transition:opacity .2s ease}
+    .cap{position:absolute;left:50%;bottom:-28px;translate:-50% 0;width:110px;height:50px;background:repeating-linear-gradient(90deg,#6b7280, #6b7280 12px, #9ca3af 12px, #9ca3af 24px);border-radius:6px}
+    .filament{position:absolute;left:50%;top:46%;translate:-50% -50%;width:70px;height:30px;border:3px solid rgba(255,157,0,.65);border-top:none;border-radius:0 0 40px 40px;filter:drop-shadow(0 0 10px rgba(255,180,0,.6));opacity:.3;transition:opacity .2s ease}
+
+    .warn{color:var(--warn);font-weight:700}
+    .err{color:var(--danger);font-weight:700}
+
+    @media (max-width: 980px){
+      .controls{grid-column:span 12}
+      .meters{grid-column:span 12}
+    }
+    .big-digital{margin-top:8px;text-align:center;font-weight:900;font-size:1.4rem;letter-spacing:.4px}
+    .digital-glow{color:var(--glow);text-shadow:0 0 6px rgba(253,230,138,.65), 0 0 14px rgba(253,230,138,.35)}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Προσομοίωση λαμπτήρα (V–I–P)</h1>
+    <p class="lead">Μια πηγή τροφοδοτεί τον λαμπτήρα και τοποθετείται παράλληλα σε αυτόν. Ρύθμισε την τάση (0–100 V) και την αντίσταση του λαμπτήρα (0–100 Ω). Παρατήρησε ένταση, ισχύ και φωτεινότητα.</p>
+
+    <div class="grid">
+      <!-- Ρυθμίσεις -->
+      <section class="card controls" aria-label="Ρυθμίσεις">
+        <div>
+          <label for="vRange">Τάση πηγής V (Volt) <span><strong id="vLabel">40.0</strong> V</span></label>
+          <div class="row">
+            <input id="vRange" type="range" min="0" max="100" step="0.1" value="40" />
+            <input id="vInput" type="number" min="0" max="100" step="0.1" value="40" />
+          </div>
+        </div>
+        <div>
+          <label for="rRange">Αντίσταση λαμπτήρα R (Ω) <span><strong id="rLabel">10.0</strong> Ω</span></label>
+          <div class="row">
+            <input id="rRange" type="range" min="0" max="100" step="0.1" value="10" />
+            <input id="rInput" type="number" min="0" max="100" step="0.1" value="10" />
+          </div>
+        </div>
+        <div class="kv">
+          <div class="k">Κατάσταση:</div>
+          <div class="v" id="status">—</div>
+        </div>
+      </section>
+
+      <!-- Όργανα -->
+      <section class="card meters" aria-label="Όργανα μέτρησης">
+        <!-- Βολτόμετρο -->
+        <div class="card meter-card">
+          <div class="badge">Βολτόμετρο (πηγή)</div>
+          <div class="gauge">
+            <svg viewBox="0 0 200 120" aria-hidden="true">
+              <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="14" stroke-linecap="round"/>
+              <path id="v-arc" d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="var(--accent)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 999"/>
+              <circle cx="100" cy="100" r="6" fill="#e5e7eb"/>
+              <rect x="83" y="100" width="34" height="10" rx="5" fill="#e5e7eb"/>
+              <g id="v-needle" class="needle">
+                <rect x="98" y="40" width="4" height="60" rx="2" fill="#e5e7eb"/>
+              </g>
+            </svg>
+            <div class="readout"><span id="vRead">40.0</span> V</div>
+          </div>
+          <div class="big-digital digital-glow">Τάση: <span id="vBig">40.0</span> V</div>
+        </div>
+
+        <!-- Αμπερόμετρο -->
+        <div class="card meter-card">
+          <div class="badge">Αμπερόμετρο</div>
+          <div class="gauge">
+            <svg viewBox="0 0 200 120" aria-hidden="true">
+              <path d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="rgba(255,255,255,.15)" stroke-width="14" stroke-linecap="round"/>
+              <path id="i-arc" d="M20,100 A80,80 0 0 1 180,100" fill="none" stroke="var(--good)" stroke-width="10" stroke-linecap="round" stroke-dasharray="0 999"/>
+              <circle cx="100" cy="100" r="6" fill="#e5e7eb"/>
+              <rect x="83" y="100" width="34" height="10" rx="5" fill="#e5e7eb"/>
+              <g id="i-needle" class="needle">
+                <rect x="98" y="40" width="4" height="60" rx="2" fill="#e5e7eb"/>
+              </g>
+            </svg>
+            <div class="readout"><span id="iRead">0.0</span> A</div>
+          </div>
+          <div class="big-digital digital-glow">Ένταση: <span id="iBig">0.00</span> A</div>
+        </div>
+
+        <!-- Λαμπτήρας -->
+        <div class="card bulb-card">
+          <div class="badge" style="grid-column: 1 / -1;">Λαμπτήρας – Ισχύς & Φωτεινότητα</div>
+          <div class="scene" style="grid-column: span 6;">
+            <div class="power-display">Ισχύς: <span id="Pbig">0.00</span> W</div>
+            <!-- ΜΟΝΟ ο λαμπτήρας (χωρίς μπαταρία/διακόπτη/σύρματα) -->
+            <div class="bulb" aria-hidden="true">
+              <div class="filament"></div>
+              <div class="cap"></div>
+            </div>
+          </div>
+          <div style="grid-column: span 6; display:grid;gap:10px;align-content:start;">
+            <div class="kv">
+              <div class="k">Ρεύμα I:</div>
+              <div class="v"><span id="I">0.00</span> A</div>
+              <div class="k">Ισχύς P (στον λαμπτήρα):</div>
+              <div class="v"><span id="P">0.00</span> W</div>
+              <div class="k">Φωτεινότητα (0–100%):</div>
+              <div class="v"><span id="brightness">0</span>%</div>
+            </div>
+            <div id="note" class="kv">
+              <div class="k">Σημείωση:</div>
+              <div class="v">—</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    // === Επιλογή στοιχείων ===
+    const vRange = document.getElementById('vRange');
+    const vInput = document.getElementById('vInput');
+    const rRange = document.getElementById('rRange');
+    const rInput = document.getElementById('rInput');
+
+    const vLabel = document.getElementById('vLabel');
+    const rLabel = document.getElementById('rLabel');
+
+    const vRead = document.getElementById('vRead');
+    const iRead = document.getElementById('iRead');
+    const vBig = document.getElementById('vBig');
+    const iBig = document.getElementById('iBig');
+
+    const Iel = document.getElementById('I');
+    const Pel = document.getElementById('P');
+    const Pbig = document.getElementById('Pbig');
+    const brightEl = document.getElementById('brightness');
+
+    const statusEl = document.getElementById('status');
+    const noteEl = document.querySelector('#note .v');
+
+    const bulb = document.querySelector('.bulb');
+    const filament = document.querySelector('.filament');
+
+    const vNeedle = document.getElementById('v-needle');
+    const iNeedle = document.getElementById('i-needle');
+
+    const vArc = document.getElementById('v-arc');
+    const iArc = document.getElementById('i-arc');
+
+    // === Βοηθητικά ===
+    function clamp(n,min,max){return Math.max(min, Math.min(max, n));}
+
+    function syncPair(range,input,label){
+      const sync = (from, to)=>{
+        to.value = from.value;
+        label.textContent = Number(from.value).toFixed(1);
+        compute();
+      };
+      range.addEventListener('input', ()=>sync(range,input));
+      input.addEventListener('input', ()=>{
+        const min = parseFloat(range.min), max = parseFloat(range.max);
+        let val = parseFloat(input.value);
+        if (isNaN(val)) val = min;
+        input.value = clamp(val, min, max);
+        sync(input,range);
+      });
+      label.textContent = Number(range.value).toFixed(1);
+    }
+
+    syncPair(vRange, vInput, vLabel);
+    syncPair(rRange, rInput, rLabel);
+
+    // Χαρακτηριστική ισχύς για μη γραμμική φωτεινότητα
+    const Pk = 60; // W
+
+    function fmt(x){
+      if(!isFinite(x)) return '∞';
+      const ax = Math.abs(x);
+      if (ax >= 1000) return x.toFixed(0);
+      if (ax >= 100) return x.toFixed(1);
+      return x.toFixed(2);
+    }
+
+    function setNeedle(g, value, max){
+      const pct = clamp(max === 0 ? 0 : value / max, 0, 1);
+      const angle = -90 + (180 * pct); // -90°..+90°
+      g.style.transform = `rotate(${angle}deg)`;
+    }
+
+    function setArc(arc, value, max){
+      const pct = clamp(max === 0 ? 0 : value / max, 0, 1);
+      const totalLen = Math.PI * 80; // προσεγγιστικό μήκος ημικυκλίου r≈80
+      const filled = totalLen * pct;
+      arc.setAttribute('stroke-dasharray', `${filled} ${999}`);
+    }
+
+    function compute(){
+      const V = parseFloat(vRange.value);
+      const R = parseFloat(rRange.value);
+
+      let I, P1, P2, P3;
+      let status = '';
+      let note = '—';
+
+      if (R === 0 && V>0){
+        I = Infinity; P1=Infinity; P2=Infinity; P3=0;
+        status = '<span class="err">R = 0 Ω (ιδανικός αγωγός)</span>';
+        note = 'Θέσε R > 0 για να ανάψει ο λαμπτήρας με πεπεραστή ισχύ.';
+      } else {
+        I = R===0 ? 0 : V / R; // Νόμος του Ωμ (χωρίς Rs)
+        P1 = V * I;        // P = V·I
+        P2 = (V*V) / (R||1); // P = V²/R (αποφυγή διαίρεσης με 0 στο άκρο)
+        P3 = (I*I) * R;    // P = I²·R
+        status = '<span class="badge">Κανονική λειτουργία</span>';
+      }
+
+      // Ψηφιακές ενδείξεις
+      vRead.textContent = Number(V).toFixed(1);
+      if (vBig) vBig.textContent = Number(V).toFixed(1);
+      iRead.textContent = fmt(I);
+      if (iBig) iBig.textContent = fmt(I);
+      Iel.textContent = fmt(I);
+      Pel.textContent = fmt(P3 ?? P1);
+      Pbig.textContent = fmt(P3 ?? P1);
+
+      // Αναλογικοί δείκτες
+      setNeedle(vNeedle, V, 100);
+      setArc(vArc, V, 100);
+      const Imax = 10; 
+      setNeedle(iNeedle, isFinite(I)?I:Imax, Imax);
+      setArc(iArc, isFinite(I)?I:Imax, Imax);
+
+      // Κατάσταση & σημείωση
+      statusEl.innerHTML = status;
+      noteEl.textContent = note;
+
+      // Φωτεινότητα από P_lamp = I²·R
+      const P = isFinite(P3) ? (P3||0) : 0;
+      const brightness = 100 * (1 - Math.exp(-(P) / Pk));
+      const b = clamp(brightness, 0, 100);
+      brightEl.textContent = Math.round(b);
+
+      // Εφέ λαμπτήρα
+      const glow = b/100; // 0..1
+      bulb.style.setProperty('--halo', glow);
+      bulb.style.filter = `drop-shadow(0 0 ${8 + glow*26}px rgba(255,200,0,${0.25+glow*0.55}))`;
+      filament.style.opacity = 0.25 + glow*0.75;
+    }
+
+    // === Self-tests (console) ===
+    function approx(a,b,tol=0.02){return Math.abs(a-b) <= tol;}
+    function runSelfTests(){
+      // Test 1: V=60, R=60 -> I≈1 A, P_lamp≈60 W
+      const V0=vRange.value, R0=rRange.value;
+      vRange.value = '60'; vInput.value='60';
+      rRange.value = '60'; rInput.value='60';
+      compute();
+      let Ival = parseFloat(Iel.textContent); let Pval = parseFloat(Pel.textContent);
+      console[(approx(Ival,1.00,0.02)&&approx(Pval,60.0,0.2))?'log':'error']('[TEST '+(approx(Ival,1.00,0.02)&&approx(Pval,60.0,0.2)?'PASS':'FAIL')+'] Case1 V=60 R=60 => I≈1A P≈60W', {I:Ival,P:Pval});
+
+      // Test 2: V=60, R=30 -> I≈2 A, P_lamp≈120 W
+      rRange.value = '30'; rInput.value='30';
+      compute();
+      Ival = parseFloat(Iel.textContent); Pval = parseFloat(Pel.textContent);
+      console[(approx(Ival,2.00,0.02)&&approx(Pval,120.0,0.5))?'log':'error']('[TEST '+(approx(Ival,2.00,0.02)&&approx(Pval,120.0,0.5)?'PASS':'FAIL')+'] Case2 V=60 R=30 => I≈2A P≈120W', {I:Ival,P:Pval});
+
+      // Test 3: V=0, R=οποιοδήποτε -> I=0, P=0
+      vRange.value = '0'; vInput.value='0';
+      rRange.value = '50'; rInput.value='50';
+      compute();
+      Ival = parseFloat(Iel.textContent)||0; Pval = parseFloat(Pel.textContent)||0;
+      console[(Ival===0 && Pval===0)?'log':'error']('[TEST '+((Ival===0&&Pval===0)?'PASS':'FAIL')+'] Case3 V=0 => I=0 P=0');
+
+      // restore
+      vRange.value = V0; vInput.value=V0; rRange.value = R0; rInput.value = R0; compute();
+    }
+
+    // Εκκίνηση
+    compute();
+    runSelfTests();
+  </script>
+</body>
+</html>
