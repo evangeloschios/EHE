@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Τεστ Αξιολόγησης – Κεφάλαιο 1.3 – Ηλεκτρικές Εγκαταστάσεις</title>
+<style>
+:root{
+  --ink:#17324d; --soft:#536b80; --blue:#1f6fb2; --blue2:#eaf4fc;
+  --orange:#ef7d27; --orange2:#fff1e5; --green:#138a62; --green2:#e8f7f1;
+  --red:#c63b3b; --red2:#fff0f0; --line:#d8e2ec; --paper:#fff; --bg:#f3f7fb;
+  --shadow:0 10px 28px rgba(26,58,89,.10); --radius:18px;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; color:var(--ink);
+  font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Arial,sans-serif;
+  background:linear-gradient(135deg,#f7fbff,#fff8f1);
+}
+main{max-width:1050px;margin:auto;padding:18px}
+header{
+  background:linear-gradient(135deg,#fff,#edf7ff);
+  border:1px solid var(--line);border-radius:24px;padding:24px;
+  box-shadow:var(--shadow);margin-bottom:18px;
+}
+header h1{margin:0 0 8px;font-size:clamp(27px,4vw,44px)}
+header p{margin:5px 0;color:var(--soft);line-height:1.5}
+.author{font-weight:800;color:var(--orange);margin-top:10px}
+.card{
+  background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);
+  padding:20px;box-shadow:var(--shadow);margin:16px 0;
+}
+.card h2{margin:0 0 8px;font-size:25px}
+.section-note{color:var(--soft);margin:0 0 15px;line-height:1.5}
+.info-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+label.field{font-weight:800;font-size:14px}
+input[type="text"],input[type="date"],input[type="number"],select{
+  width:100%;padding:11px 12px;margin-top:6px;border:1px solid #b8c9d8;
+  border-radius:11px;background:#fff;color:var(--ink);font:inherit;
+}
+.question{
+  border:1px solid var(--line);border-radius:15px;padding:15px;margin:12px 0;background:#fff;
+}
+.question.correct{border-color:#57b996;background:var(--green2)}
+.question.wrong{border-color:#e08b8b;background:var(--red2)}
+.qtitle{font-weight:850;line-height:1.45;margin-bottom:10px}
+.choices{display:grid;gap:8px}
+.choice{
+  display:flex;gap:9px;align-items:flex-start;padding:10px 11px;
+  background:#f7fafc;border:1px solid #e1e9f0;border-radius:10px;font-weight:600;
+}
+.choice input{margin-top:3px}
+.feedback{min-height:20px;margin-top:8px;font-size:14px;font-weight:800}
+.feedback.ok{color:var(--green)} .feedback.no{color:var(--red)}
+.match-grid{display:grid;grid-template-columns:90px 1fr;gap:9px 12px;align-items:center}
+.prefix{font-size:23px;font-weight:950;color:var(--blue);text-align:center}
+.numeric-row{display:grid;grid-template-columns:minmax(160px,260px) auto;gap:9px;align-items:end}
+.numeric-row span{padding-bottom:11px;font-weight:850}
+.symbol-question{display:grid;grid-template-columns:190px 1fr;gap:18px;align-items:center}
+.symbol-box{
+  min-height:125px;display:grid;place-items:center;background:#f7fafc;
+  border:1px solid #e1e9f0;border-radius:14px;
+}
+.symbol-box svg{width:150px;height:95px;stroke:var(--ink);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.actions{
+  position:sticky;bottom:8px;z-index:10;display:flex;flex-wrap:wrap;gap:10px;align-items:center;
+  background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border:1px solid var(--line);
+  border-radius:17px;padding:12px;box-shadow:var(--shadow);margin-top:18px;
+}
+button{
+  border:0;border-radius:12px;padding:12px 16px;font:inherit;font-weight:850;cursor:pointer;
+  background:var(--blue);color:#fff;
+}
+button.orange{background:var(--orange)}
+button.secondary{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.score-box{
+  flex:1;min-width:230px;border-radius:12px;background:var(--blue2);padding:10px 13px;
+  font-weight:850;
+}
+.status{margin-top:12px;padding:12px 14px;border-radius:12px;background:#f2f5f8;color:var(--soft);font-weight:750}
+.status.ok{background:var(--green2);color:var(--green)}
+.status.warn{background:var(--orange2);color:#a45214}
+.small{font-size:13px;color:var(--soft)}
+.submission-stamp{
+  margin-top:12px;padding:10px 12px;border:2px solid var(--green);border-radius:12px;
+  color:var(--green);font-weight:900;background:var(--green2)
+}
+@media(max-width:760px){
+  .info-grid,.symbol-question{grid-template-columns:1fr}
+  .match-grid{grid-template-columns:70px 1fr}
+  main{padding:9px}
+  .actions{position:static}
+}
+@media print{
+  body{background:#fff}.actions{position:static;box-shadow:none}.card,header{box-shadow:none}
+  button{display:none}
+}
+</style>
+</head>
+<body>
+<main>
+<header>
+  <div class="small">Β΄ ΕΠΑ.Λ. • Ηλεκτρικές Εγκαταστάσεις • Κεφάλαιο 1.3</div>
+  <h1>Τεστ Αξιολόγησης</h1>
+  <p><strong>Βασικά ηλεκτρολογικά μεγέθη, μονάδες, προθέματα και ηλεκτρολογικά σύμβολα</strong></p>
+  <p>Σύνολο: 20 ερωτήσεις / 20 μονάδες. Μετά τον οριστικό έλεγχο οι απαντήσεις κλειδώνουν.</p>
+  <div class="author">Ε. Κοκκώδης</div>
+</header>
+
+<section class="card" id="studentInfo">
+  <h2>Στοιχεία μαθητή</h2>
+  <div class="info-grid">
+    <label class="field">Ονοματεπώνυμο
+      <input id="studentName" type="text" autocomplete="name" placeholder="Ονοματεπώνυμο μαθητή">
+    </label>
+    <label class="field">Τμήμα
+      <input id="classSection" type="text" placeholder="π.χ. ΒΗΛ1">
+    </label>
+    <label class="field">Ημερομηνία
+      <input id="testDate" type="date">
+    </label>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Α. Ηλεκτρικά μεγέθη – μονάδες – συμβολισμοί</h2>
+  <p class="section-note">Στο μέρος αυτό εξετάζονται κανονικά τα βασικά μεγέθη της ενότητας.</p>
+  <div id="partA"></div>
+</section>
+
+<section class="card">
+  <h2>Β. Πολλαπλάσια – υποπολλαπλάσια</h2>
+  <p class="section-note">Εξετάζονται τα προθέματα, τα σύμβολά τους, οι αντίστοιχοι συντελεστές και δύο απλές μετατροπές προς μονάδα χωρίς πρόθεμα.</p>
+
+  <div class="question" data-q="6">
+    <div class="qtitle">7. Αντιστοίχισε τα πολλαπλάσια με τον σωστό συντελεστή.</div>
+    <div class="match-grid">
+      <div class="prefix">k</div><select id="multi_k" data-required="1"></select>
+      <div class="prefix">M</div><select id="multi_M" data-required="1"></select>
+      <div class="prefix">G</div><select id="multi_G" data-required="1"></select>
+      <div class="prefix">T</div><select id="multi_T" data-required="1"></select>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question" data-q="7">
+    <div class="qtitle">8. Αντιστοίχισε τα υποπολλαπλάσια με τον σωστό συντελεστή.</div>
+    <div class="match-grid">
+      <div class="prefix">m</div><select id="sub_m" data-required="1"></select>
+      <div class="prefix">μ</div><select id="sub_mu" data-required="1"></select>
+      <div class="prefix">n</div><select id="sub_n" data-required="1"></select>
+      <div class="prefix">p</div><select id="sub_p" data-required="1"></select>
+    </div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question" data-q="8">
+    <div class="qtitle">9. 2,5 kW = πόσα W;</div>
+    <div class="numeric-row"><input id="conv_kw" type="text" inputmode="decimal" data-required="1" placeholder="Αριθμητική τιμή"><span>W</span></div>
+    <div class="feedback"></div>
+  </div>
+
+  <div class="question" data-q="9">
+    <div class="qtitle">10. 4 mA = πόσα A;</div>
+    <div class="numeric-row"><input id="conv_ma" type="text" inputmode="decimal" data-required="1" placeholder="Αριθμητική τιμή"><span>A</span></div>
+    <div class="feedback"></div>
+  </div>
+</section>
+
+<section class="card">
+  <h2>Γ. Αντιστοίχιση ισχύος με ίππο (HP)</h2>
+  <p class="section-note">Στο μέρος αυτό δεν εξετάζονται τύποι ισχύος ή άλλα είδη μετατροπών. Χρησιμοποιείται μόνο η σχέση <strong>1 HP = 746 W</strong>.</p>
+  <div id="partC"></div>
+</section>
+
+<section class="card">
+  <h2>Δ. Αναγνώριση ηλεκτρολογικών συμβόλων</h2>
+  <p class="section-note">Επίλεξε την ονομασία που αντιστοιχεί σε κάθε σύμβολο.</p>
+  <div id="partD"></div>
+</section>
+
+<div class="actions">
+  <div class="score-box" id="scoreBox">Βαθμολογία: — / 20</div>
+  <button id="checkBtn" class="orange">Οριστικός έλεγχος</button>
+  <button id="submitBtn" disabled>Αποστολή στο Drive</button>
+  <button id="printBtn" class="secondary">Εκτύπωση</button>
+</div>
+<div id="submitStatus" class="status">Συμπλήρωσε όλες τις ερωτήσεις και πάτησε «Οριστικός έλεγχος».</div>
+</main>
+
+<script>
+(() => {
+'use strict';
+
+const WEB_APP_URL='https://script.google.com/macros/s/AKfycbxOCuReSAZdoi0zkkwuE6yehThLN3jewGjRoIGdKFtdEzaI62Xk2ZRULZ70ncJr8Z27/exec';
+const QUIZ_CODE='ILEKTRIKES_EGK_KEF_1_3_MEG_MON_PREFIX_SYMBOLS';
+const QUIZ_TITLE='Τεστ Αξιολόγησης Κεφάλαιο 1.3 – Ηλεκτρικά μεγέθη, μονάδες και σύμβολα';
+const TOTAL=20;
+
+let hasChecked=false, submitted=false, lastScore=0, lastPercent=0, lastGrade20=0;
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const parseNum=v=>{const s=String(v).trim().replace(/\s/g,''); if(s.includes(',')&&s.includes('.')) return Number(s.replace(/\./g,'').replace(',','.')); if(s.includes(',')) return Number(s.replace(',','.')); return Number(s);};
+
+const A = [
+  {q:'Ποιο σύμβολο χρησιμοποιούμε για την τάση;', options:['U ή V','I','R','P'], a:'U ή V'},
+  {q:'Ποιο είναι το σύμβολο της έντασης του ηλεκτρικού ρεύματος;', options:['U','I','R','E'], a:'I'},
+  {q:'Ποια είναι η μονάδα μέτρησης της ηλεκτρικής αντίστασης;', options:['Βολτ (V)','Αμπέρ (A)','Ωμ (Ω)','Βατ (W)'], a:'Ωμ (Ω)'},
+  {q:'Ποιο σύμβολο χρησιμοποιούμε για την ισχύ;', options:['P','E','I','R'], a:'P'},
+  {q:'Ποια πρακτική μονάδα χρησιμοποιείται για την ηλεκτρική ενέργεια;', options:['kW','kWh','W/s','A/h'], a:'kWh'},
+  {q:'Η ένταση του ηλεκτρικού ρεύματος εκφράζει:', options:['τη ροή ηλεκτρικού φορτίου','την αντίθεση στη ροή του ρεύματος','τη διαφορά ηλεκτρικού δυναμικού','την ενέργεια ανά ώρα'], a:'τη ροή ηλεκτρικού φορτίου'}
+];
+
+const C = [
+  {q:'Πόσα W αντιστοιχούν σε 1 HP;', options:['736 W','746 W','760 W','1000 W'], a:'746 W'},
+  {q:'0,746 kW αντιστοιχούν σε:', options:['0,5 HP','1 HP','1,34 HP','2 HP'], a:'1 HP'}
+];
+
+const symbolOptions=[
+  'Γείωση','Ασφάλεια τήξης','Λαμπτήρας / ενδεικτική λυχνία','Ρευματοδότης με γείωση',
+  'Μετασχηματιστής','Ανοικτός διακόπτης','Κλειστός διακόπτης','Ασύγχρονος κινητήρας'
+];
+
+const D = [
+  {type:'ground',a:'Γείωση'},
+  {type:'fuse',a:'Ασφάλεια τήξης'},
+  {type:'lamp',a:'Λαμπτήρας / ενδεικτική λυχνία'},
+  {type:'socketGround',a:'Ρευματοδότης με γείωση'},
+  {type:'transformer',a:'Μετασχηματιστής'},
+  {type:'switchOpen',a:'Ανοικτός διακόπτης'},
+  {type:'motor',a:'Ασύγχρονος κινητήρας'},
+  {type:'switchClosed',a:'Κλειστός διακόπτης'}
+];
+
+function symbolSvg(type){
+  const start='<svg viewBox="0 0 140 90" role="img" aria-hidden="true">';
+  const end='</svg>';
+  const map={
+    switchOpen:'<circle cx="28" cy="58" r="5"/><circle cx="108" cy="58" r="5"/><line x1="33" y1="55" x2="88" y2="28"/><line x1="18" y1="58" x2="23" y2="58"/><line x1="113" y1="58" x2="122" y2="58"/>',
+    switchClosed:'<circle cx="28" cy="58" r="5"/><circle cx="108" cy="58" r="5"/><line x1="33" y1="56" x2="103" y2="58"/><line x1="18" y1="58" x2="23" y2="58"/><line x1="113" y1="58" x2="122" y2="58"/>',
+    fuse:'<line x1="20" y1="45" x2="120" y2="45"/><rect x="50" y="30" width="40" height="30"/>',
+    lamp:'<circle cx="70" cy="45" r="27"/><line x1="50" y1="25" x2="90" y2="65"/><line x1="90" y1="25" x2="50" y2="65"/>',
+    socketGround:'<line x1="70" y1="12" x2="70" y2="36"/><path d="M46 60 A24 24 0 0 1 94 60"/><line x1="56" y1="36" x2="84" y2="36"/>',
+    ground:'<line x1="70" y1="12" x2="70" y2="48"/><line x1="45" y1="48" x2="95" y2="48"/><line x1="52" y1="58" x2="88" y2="58"/><line x1="60" y1="68" x2="80" y2="68"/>',
+    transformer:'<line x1="15" y1="45" x2="35" y2="45"/><path d="M35 20 q18 8 0 16 q18 8 0 16 q18 8 0 16"/><path d="M105 20 q-18 8 0 16 q-18 8 0 16 q-18 8 0 16"/><line x1="105" y1="45" x2="125" y2="45"/><line x1="66" y1="18" x2="66" y2="72"/><line x1="74" y1="18" x2="74" y2="72"/>',
+    motor:'<circle cx="70" cy="45" r="31"/><circle cx="70" cy="45" r="20"/><text x="70" y="53" text-anchor="middle" font-size="22" fill="currentColor" stroke="none" font-weight="700">M</text><line x1="70" y1="14" x2="70" y2="3"/><line x1="63" y1="14" x2="63" y2="3"/><line x1="77" y1="14" x2="77" y2="3"/>',
+    relayCoil:'<line x1="70" y1="16" x2="70" y2="28"/><rect x="42" y="28" width="56" height="34"/><line x1="70" y1="62" x2="70" y2="74"/><line x1="52" y1="38" x2="88" y2="52"/><line x1="65" y1="16" x2="75" y2="16"/><line x1="65" y1="74" x2="75" y2="74"/>'
+  };
+  return start+(map[type]||'')+end;
+}
+
+function renderMC(container, data, offset, group){
+  const el=$(container);
+  data.forEach((item,i)=>{
+    const qi=offset+i;
+    const q=document.createElement('div');
+    q.className='question'; q.dataset.q=String(qi);
+    q.innerHTML=`<div class="qtitle">${qi+1}. ${item.q}</div>
+      <div class="choices">${item.options.map((o,j)=>`
+        <label class="choice"><input type="radio" name="${group}_${i}" value="${o.replace(/"/g,'&quot;')}" data-required="1"> <span>${o}</span></label>`).join('')}</div>
+      <div class="feedback"></div>`;
+    el.appendChild(q);
+  });
+}
+
+function fillFactorSelect(id, values){
+  const s=document.getElementById(id);
+  s.innerHTML='<option value="">— Επίλεξε συντελεστή —</option>'+values.map(v=>`<option value="${v}">${v}</option>`).join('');
+}
+const posFactors=['10³','10⁶','10⁹','10¹²'];
+const negFactors=['10⁻³','10⁻⁶','10⁻⁹','10⁻¹²'];
+['multi_k','multi_M','multi_G','multi_T'].forEach(id=>fillFactorSelect(id,posFactors));
+['sub_m','sub_mu','sub_n','sub_p'].forEach(id=>fillFactorSelect(id,negFactors));
+
+function renderSymbols(){
+  const el=$('#partD');
+  D.forEach((item,i)=>{
+    const qi=12+i;
+    const q=document.createElement('div');
+    q.className='question';q.dataset.q=String(qi);
+    q.innerHTML=`<div class="qtitle">${qi+1}. Αναγνώρισε το παρακάτω σύμβολο.</div>
+      <div class="symbol-question">
+        <div class="symbol-box">${symbolSvg(item.type)}</div>
+        <select id="sym_${i}" data-required="1">
+          <option value="">— Επίλεξε ονομασία —</option>
+          ${symbolOptions.map(o=>`<option value="${o.replace(/"/g,'&quot;')}">${o}</option>`).join('')}
+        </select>
+      </div><div class="feedback"></div>`;
+    el.appendChild(q);
+  });
+}
+
+renderMC('#partA',A,0,'a');
+renderMC('#partC',C,10,'c');
+renderSymbols();
+
+function setToday(){
+  const d=new Date();
+  const local=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  $('#testDate').value=local;
+}
+setToday();
+
+function answerForQuestion(qi){
+  if(qi>=0 && qi<=5){
+    const i=qi;
+    const r=document.querySelector(`input[name="a_${i}"]:checked`);
+    return r?r.value:'';
+  }
+  if(qi===6) return ['multi_k','multi_M','multi_G','multi_T'].map(id=>$('#'+id).value).join(' | ');
+  if(qi===7) return ['sub_m','sub_mu','sub_n','sub_p'].map(id=>$('#'+id).value).join(' | ');
+  if(qi===8) return $('#conv_kw').value.trim();
+  if(qi===9) return $('#conv_ma').value.trim();
+  if(qi===10 || qi===11){
+    const i=qi-10;
+    const r=document.querySelector(`input[name="c_${i}"]:checked`);
+    return r?r.value:'';
+  }
+  if(qi>=12 && qi<=19) return $('#sym_'+(qi-12)).value;
+  return '';
+}
+
+function isAnswered(qi){
+  if(qi===6) return ['multi_k','multi_M','multi_G','multi_T'].every(id=>$('#'+id).value);
+  if(qi===7) return ['sub_m','sub_mu','sub_n','sub_p'].every(id=>$('#'+id).value);
+  return answerForQuestion(qi)!=='';
+}
+
+function mark(qi,ok,msg){
+  const q=document.querySelector(`.question[data-q="${qi}"]`);
+  q.classList.remove('correct','wrong');
+  q.classList.add(ok?'correct':'wrong');
+  const f=q.querySelector('.feedback');
+  f.className='feedback '+(ok?'ok':'no');
+  f.textContent=msg;
+}
+
+function validateBeforeCheck(){
+  if(!$('#studentName').value.trim() || !$('#classSection').value.trim() || !$('#testDate').value){
+    alert('Συμπλήρωσε πρώτα ονοματεπώνυμο, τμήμα και ημερομηνία.');
+    $('#studentInfo').scrollIntoView({behavior:'smooth',block:'center'});
+    return false;
+  }
+  for(let i=0;i<TOTAL;i++){
+    if(!isAnswered(i)){
+      alert(`Δεν έχει απαντηθεί η ερώτηση ${i+1}.`);
+      document.querySelector(`.question[data-q="${i}"]`).scrollIntoView({behavior:'smooth',block:'center'});
+      return false;
+    }
+  }
+  return true;
+}
+
+function finalCheck(){
+  if(hasChecked){alert('Ο οριστικός έλεγχος έχει ήδη πραγματοποιηθεί.');return;}
+  if(!validateBeforeCheck())return;
+
+  let score=0;
+
+  A.forEach((item,i)=>{
+    const val=answerForQuestion(i), ok=val===item.a;
+    if(ok)score++;
+    mark(i,ok,ok?'Σωστά!':`Σωστή απάντηση: ${item.a}`);
+  });
+
+  const multOk=$('#multi_k').value==='10³' && $('#multi_M').value==='10⁶' &&
+               $('#multi_G').value==='10⁹' && $('#multi_T').value==='10¹²';
+  if(multOk)score++;
+  mark(6,multOk,multOk?'Σωστά!':'Σωστή αντιστοίχιση: k→10³, M→10⁶, G→10⁹, T→10¹²');
+
+  const subOk=$('#sub_m').value==='10⁻³' && $('#sub_mu').value==='10⁻⁶' &&
+              $('#sub_n').value==='10⁻⁹' && $('#sub_p').value==='10⁻¹²';
+  if(subOk)score++;
+  mark(7,subOk,subOk?'Σωστά!':'Σωστή αντιστοίχιση: m→10⁻³, μ→10⁻⁶, n→10⁻⁹, p→10⁻¹²');
+
+  const kw=parseNum($('#conv_kw').value);
+  const kwOk=Number.isFinite(kw) && Math.abs(kw-2500)<0.0001;
+  if(kwOk)score++;
+  mark(8,kwOk,kwOk?'Σωστά!':'Σωστή απάντηση: 2.500 W');
+
+  const ma=parseNum($('#conv_ma').value);
+  const maOk=Number.isFinite(ma) && Math.abs(ma-0.004)<0.0000001;
+  if(maOk)score++;
+  mark(9,maOk,maOk?'Σωστά!':'Σωστή απάντηση: 0,004 A');
+
+  C.forEach((item,i)=>{
+    const qi=10+i, val=answerForQuestion(qi), ok=val===item.a;
+    if(ok)score++;
+    mark(qi,ok,ok?'Σωστά!':`Σωστή απάντηση: ${item.a}`);
+  });
+
+  D.forEach((item,i)=>{
+    const qi=12+i, val=answerForQuestion(qi), ok=val===item.a;
+    if(ok)score++;
+    mark(qi,ok,ok?'Σωστά!':`Σωστή απάντηση: ${item.a}`);
+  });
+
+  lastScore=score;
+  lastPercent=Math.round((score/TOTAL)*100);
+  lastGrade20=Math.round((score/TOTAL)*20*10)/10;
+  $('#scoreBox').textContent=`Βαθμολογία: ${score} / ${TOTAL} — ${lastPercent}% — ${String(lastGrade20).replace('.',',')} / 20`;
+
+  $$('input,select').forEach(el=>el.disabled=true);
+  $('#checkBtn').disabled=true;
+  $('#submitBtn').disabled=false;
+  hasChecked=true;
+
+  $('#submitStatus').className='status warn';
+  $('#submitStatus').textContent='Το τεστ βαθμολογήθηκε και κλειδώθηκε. Πάτησε «Αποστολή στο Drive».';
+  window.scrollTo({top:document.body.scrollHeight,behavior:'smooth'});
+}
+
+function collectAnswers(){
+  const rows=[];
+  for(let i=0;i<TOTAL;i++){
+    const q=document.querySelector(`.question[data-q="${i}"] .qtitle`)?.textContent || `Ερώτηση ${i+1}`;
+    rows.push({number:i+1,question:q,answer:answerForQuestion(i)});
+  }
+  return rows;
+}
+
+function buildCompletedHtmlSnapshot(){
+  const clone=document.documentElement.cloneNode(true);
+  clone.querySelectorAll('script').forEach(s=>s.remove());
+
+  clone.querySelectorAll('input').forEach(input=>{
+    const original=document.getElementById(input.id);
+    if(original){
+      if(input.type==='radio'||input.type==='checkbox'){
+        if(original.checked) input.setAttribute('checked','checked');
+        else input.removeAttribute('checked');
+      }else input.setAttribute('value',original.value);
+    }else if(input.name){
+      const checked=document.querySelector(`input[name="${CSS.escape(input.name)}"][value="${CSS.escape(input.value)}"]`)?.checked;
+      if(checked)input.setAttribute('checked','checked'); else input.removeAttribute('checked');
+    }
+    input.setAttribute('disabled','disabled');
+  });
+
+  clone.querySelectorAll('select').forEach(sel=>{
+    const original=document.getElementById(sel.id);
+    if(original){
+      [...sel.options].forEach((opt,idx)=>{
+        if(idx===original.selectedIndex)opt.setAttribute('selected','selected');
+        else opt.removeAttribute('selected');
+      });
+    }
+    sel.setAttribute('disabled','disabled');
+  });
+
+  clone.querySelectorAll('button').forEach(b=>b.setAttribute('disabled','disabled'));
+
+  const status=clone.querySelector('#submitStatus');
+  if(status){
+    status.className='status ok';
+    status.textContent='Αντίγραφο υποβολής: το τεστ ελέγχθηκε, βαθμολογήθηκε και κλειδώθηκε.';
+  }
+
+  const score=clone.querySelector('#scoreBox');
+  if(score)score.textContent=`Βαθμολογία: ${lastScore} / ${TOTAL} — ${lastPercent}% — ${String(lastGrade20).replace('.',',')} / 20`;
+
+  const header=clone.querySelector('header');
+  if(header){
+    const stamp=document.createElement('div');
+    stamp.className='submission-stamp';
+    stamp.textContent=`ΑΝΤΙΓΡΑΦΟ ΥΠΟΒΟΛΗΣ — ${$('#studentName').value.trim()} — ${$('#classSection').value.trim()} — Βαθμολογία: ${lastScore}/${TOTAL} (${lastPercent}%) — ${String(lastGrade20).replace('.',',')}/20`;
+    header.appendChild(stamp);
+  }
+
+  const meta=document.createElement('meta');
+  meta.setAttribute('name','submission-created-at');
+  meta.setAttribute('content',new Date().toISOString());
+  clone.querySelector('head')?.appendChild(meta);
+
+  return '<!DOCTYPE html>\n'+clone.outerHTML;
+}
+
+function submitResults(){
+  if(!hasChecked){alert('Πρώτα πρέπει να γίνει ο οριστικός έλεγχος.');return;}
+  if(submitted){alert('Το τεστ έχει ήδη υποβληθεί.');return;}
+
+  const payload={
+    quizCode:QUIZ_CODE,
+    quizTitle:QUIZ_TITLE,
+    studentName:$('#studentName').value.trim(),
+    classSection:$('#classSection').value.trim(),
+    testDate:$('#testDate').value,
+    score:String(lastScore),
+    total:String(TOTAL),
+    percent:String(lastPercent),
+    grade20:String(lastGrade20),
+    answers:JSON.stringify(collectAnswers()),
+    htmlContent:buildCompletedHtmlSnapshot(),
+    userAgent:navigator.userAgent,
+    submittedAt:new Date().toISOString()
+  };
+
+  const form=document.createElement('form');
+  form.method='POST';
+  form.action=WEB_APP_URL;
+  form.target='_blank';
+  form.acceptCharset='UTF-8';
+  form.enctype='application/x-www-form-urlencoded';
+  form.style.display='none';
+
+  Object.entries(payload).forEach(([key,value])=>{
+    const field=document.createElement('textarea');
+    field.name=key;
+    field.value=value;
+    form.appendChild(field);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+  setTimeout(()=>form.remove(),2000);
+
+  submitted=true;
+  $('#submitBtn').disabled=true;
+  $('#submitStatus').className='status ok';
+  $('#submitStatus').textContent='Η υποβολή στάλθηκε. Στη νέα καρτέλα πρέπει να εμφανιστεί: «OK: Η υποβολή αποθηκεύτηκε στο Google Drive.»';
+}
+
+$('#checkBtn').addEventListener('click',finalCheck);
+$('#submitBtn').addEventListener('click',submitResults);
+$('#printBtn').addEventListener('click',()=>window.print());
+
+})();
+</script>
+</body>
+</html>
