@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Κεφάλαιο 1.4 - Ρευματοδότηση Ηλεκτρικών Εγκαταστάσεων</title>
+<style>
+  :root{
+    --bg:#f4f7fb;
+    --card:#ffffff;
+    --ink:#19324d;
+    --muted:#59708a;
+    --blue:#1f6fb2;
+    --blue2:#eaf4ff;
+    --orange:#ef7d27;
+    --line:#d7e2ee;
+    --good:#0f8f5d;
+    --shadow:0 10px 28px rgba(25,50,77,.10);
+    --radius:22px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;font-family:Segoe UI,Arial,sans-serif;background:linear-gradient(180deg,#f8fbff,#eef4f9 55%,#f8fbff);
+    color:var(--ink);
+  }
+  .wrap{max-width:1200px;margin:0 auto;padding:20px}
+  .topbar{
+    display:flex;justify-content:space-between;gap:16px;align-items:flex-end;flex-wrap:wrap;
+    margin-bottom:14px;
+  }
+  .brand h1{margin:0;font-size:clamp(22px,3vw,34px);line-height:1.15}
+  .brand small{display:block;color:var(--muted);margin-top:6px;font-size:15px}
+  .author{font-weight:800;color:var(--muted);white-space:nowrap}
+  .nav{
+    display:flex;flex-wrap:wrap;gap:8px;background:var(--card);border:1px solid var(--line);
+    padding:10px;border-radius:18px;box-shadow:0 6px 18px rgba(25,50,77,.08);margin-bottom:18px;
+  }
+  .nav button{
+    border:0;background:#edf4fb;color:var(--ink);padding:10px 13px;border-radius:12px;font-weight:800;cursor:pointer;
+  }
+  .nav button.active,.nav button:hover{background:var(--blue);color:#fff}
+  .panel{display:none;animation:fade .25s ease}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:.1;transform:translateY(5px)}to{opacity:1;transform:none}}
+  .hero, .card, .tool, .note, .flash-card{
+    background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
+  }
+  .hero{padding:34px;overflow:hidden;position:relative}
+  .hero::after{
+    content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border-radius:50%;
+    border:34px solid rgba(31,111,178,.08)
+  }
+  .eyebrow{color:var(--orange);font-size:13px;font-weight:900;letter-spacing:.1em;text-transform:uppercase}
+  .hero h2{margin:10px 0 14px;font-size:clamp(32px,5vw,58px);line-height:1.02}
+  .hero p{font-size:18px;line-height:1.6;color:var(--muted);max-width:830px;margin:0}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .btn{border:0;background:var(--blue);color:#fff;padding:12px 18px;border-radius:13px;font-weight:900;cursor:pointer;box-shadow:0 8px 18px rgba(31,111,178,.22)}
+  .btn.secondary{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}
+  .btn.orange{background:var(--orange);box-shadow:0 8px 18px rgba(239,125,39,.22)}
+  .section-head{margin:6px 0 18px}
+  .section-head h2{margin:6px 0 8px;font-size:clamp(28px,4vw,44px)}
+  .section-head p{margin:0;color:var(--muted);font-size:18px;line-height:1.55}
+  .grid{display:grid;gap:18px}
+  .grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .card{padding:20px}
+  .card h3{margin:0 0 10px;font-size:22px}
+  .card p{margin:0;color:var(--muted);line-height:1.6}
+  .mini{font-size:14px;color:var(--muted)}
+  .badge{
+    width:46px;height:46px;border-radius:14px;background:var(--blue2);display:grid;place-items:center;
+    color:var(--blue);font-weight:900;margin-bottom:10px;font-size:20px
+  }
+  .pill{display:inline-block;background:#fff4ea;color:#a55210;border:1px solid #ffd1ae;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:800}
+  .timeline{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:14px;margin-top:16px}
+  .step{background:#fbfdff;border:1px solid var(--line);border-radius:18px;padding:16px;position:relative}
+  .step .num{width:34px;height:34px;border-radius:50%;background:var(--orange);color:#fff;display:grid;place-items:center;font-weight:900;margin-bottom:10px}
+  .step h4{margin:0 0 6px;font-size:17px}
+  .step p{margin:0;color:var(--muted);font-size:15px;line-height:1.55}
+  .value-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:12px}
+  .value-box{background:#f7fbff;border:1px solid var(--line);border-radius:18px;padding:18px;text-align:center}
+  .value-box strong{display:block;font-size:28px;color:var(--blue);margin-bottom:6px}
+  .value-box span{font-weight:800}
+  .diagram{background:#f7fbff;border:1px solid var(--line);border-radius:20px;padding:18px}
+  .diagram svg{width:100%;height:auto;display:block}
+  .note{padding:16px 18px;background:#fffaf2;border-color:#ffd9b6;box-shadow:none}
+  .note strong{color:#9a5317}
+  ul.clean{margin:10px 0 0 0;padding-left:20px}
+  ul.clean li{margin:8px 0;line-height:1.55}
+  .flash-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+  .flash-card{padding:18px}
+  .flash-card h4{margin:0 0 8px;font-size:19px}
+  .flash-card p{margin:0;color:var(--muted);line-height:1.55}
+  .checklist .item{background:#f8fbff;border:1px solid var(--line);border-radius:16px;padding:14px 16px;margin:10px 0}
+  .checklist .item strong{display:block;margin-bottom:4px}
+  .accordion{display:grid;gap:12px}
+  details{background:#fff;border:1px solid var(--line);border-radius:18px;padding:14px 16px;box-shadow:0 5px 14px rgba(25,50,77,.06)}
+  details summary{cursor:pointer;font-weight:900}
+  details p,details ul{color:var(--muted);line-height:1.6}
+  .footer-box{margin-top:16px;padding:18px;border-radius:20px;background:#eff8ff;border:1px solid #cde5fb}
+  .footer-box h3{margin:0 0 10px}
+  .footer-box ul{margin:0;padding-left:20px}
+  @media (max-width:900px){
+    .grid.two,.grid.three,.grid.four,.timeline,.value-grid,.flash-grid{grid-template-columns:1fr}
+    .hero{padding:24px}
+  }
+
+  .practice-summary{
+    display:flex;justify-content:space-between;gap:14px;align-items:center;flex-wrap:wrap;
+    background:#eef7ff;border:1px solid #cde5fb;border-radius:20px;padding:16px 18px;margin-bottom:18px;
+  }
+  .practice-summary strong{font-size:20px}
+  .practice-part{margin-top:22px}
+  .practice-part h3{font-size:25px;margin:0 0 12px}
+  .question{
+    background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px 18px;margin:12px 0;
+    box-shadow:0 5px 14px rgba(25,50,77,.06)
+  }
+  .question.correct{border-color:#74c9a6;background:#f3fff9}
+  .question.wrong{border-color:#ef9b9b;background:#fff7f7}
+  .q-title{font-weight:900;line-height:1.5;margin-bottom:11px}
+  .options{display:grid;gap:8px}
+  .option{
+    display:flex;align-items:flex-start;gap:9px;padding:10px 12px;border:1px solid #dbe5ef;
+    border-radius:12px;background:#f9fbfd;cursor:pointer;line-height:1.4
+  }
+  .option:hover{background:#eef6fd}
+  .option input{margin-top:3px;transform:scale(1.1)}
+  .question select,.question input[type="number"]{
+    width:100%;max-width:520px;padding:11px 12px;border:1px solid #cddae7;border-radius:11px;
+    font:inherit;background:#fff;color:var(--ink)
+  }
+  .feedback{margin-top:10px;font-weight:800;min-height:20px}
+  .correct .feedback{color:var(--good)}
+  .wrong .feedback{color:#ba3333}
+  .quiz-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
+  .score-box{
+    display:none;margin-top:18px;padding:18px;border-radius:18px;background:#19324d;color:#fff;
+    font-size:20px;font-weight:900;text-align:center
+  }
+  .score-box.show{display:block}
+  .color-key{display:inline-flex;align-items:center;gap:8px;font-weight:800}
+  .wire-swatch{width:42px;height:14px;border-radius:999px;border:1px solid rgba(0,0,0,.18);display:inline-block}
+  .wire-pe{background:repeating-linear-gradient(90deg,#2e9f42 0 10px,#f1d300 10px 20px)}
+
+  @media print{
+    body{background:#fff}
+    .nav,.hero-actions{display:none!important}
+    .panel{display:block!important}
+    .card,.hero,.tool,.flash-card{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <h1>Κεφάλαιο 1.4 — Ρευματοδότηση Ηλεκτρικών Εγκαταστάσεων</h1>
+        <small>Β΄ ΕΠΑ.Λ. • Ηλεκτρικές Εγκαταστάσεις</small>
+      </div>
+      <div class="author">Ε. Κοκκώδης</div>
+    </div>
+
+    <div class="nav">
+      <button data-page="intro" class="active">Αρχή</button>
+      <button data-page="transport">Μεταφορά ενέργειας</button>
+      <button data-page="classification">Διάκριση Ε.Η.Ε.</button>
+      <button data-page="phases">Μονοφασική / Τριφασική</button>
+      <button data-page="supplies">Παροχές κτιρίων</button>
+      <button data-page="practice">Εξάσκηση</button>
+      <button data-page="recap">Ανακεφαλαίωση</button>
+    </div>
+
+    <section id="intro" class="panel active">
+      <div class="hero">
+        <div class="eyebrow">Παρουσίαση ενότητας</div>
+        <h2>Από τον σταθμό παραγωγής μέχρι τον καταναλωτή.</h2>
+        <p>
+          Στην ενότητα 1.4 μελετάμε πώς φτάνει η ηλεκτρική ενέργεια από το δίκτυο στον καταναλωτή,
+          πώς διακρίνονται οι εσωτερικές ηλεκτρικές εγκαταστάσεις και ποιες είναι οι βασικές μορφές
+          παροχής κτιρίων: μονοφασική και τριφασική.
+        </p>
+        <div class="hero-actions">
+          <button class="btn orange" data-go="transport">Έναρξη παρουσίασης</button>
+          <button class="btn secondary" onclick="window.print()">Εκτύπωση / Αποθήκευση PDF</button>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3>Διδακτικοί στόχοι</h3>
+        <ul class="clean">
+          <li>Να περιγράφεις τη διαδρομή της ηλεκτρικής ενέργειας από την παραγωγή έως την κατανάλωση.</li>
+          <li>Να ξεχωρίζεις τις βαθμίδες τάσης: Υψηλή, Μέση και Χαμηλή Τάση.</li>
+          <li>Να διακρίνεις τις Εσωτερικές Ηλεκτρικές Εγκαταστάσεις ανάλογα με τον προορισμό, τον χώρο και τις συνθήκες λειτουργίας.</li>
+          <li>Να ερμηνεύεις τη μονοφασική παροχή 230V και την τριφασική παροχή 230/400V.</li>
+          <li>Να αναγνωρίζεις πότε προτιμάται μονοφασική και πότε τριφασική τροφοδότηση.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="transport" class="panel">
+      <div class="section-head">
+        <div class="eyebrow">Μέρος 1</div>
+        <h2>Μεταφορά ηλεκτρικής ενέργειας</h2>
+        <p>Η ενέργεια παράγεται, μεταφέρεται σε μεγάλες αποστάσεις με υψηλή τάση και τελικά φτάνει στον καταναλωτή σε χαμηλή τάση.</p>
+      </div>
+
+      <div class="timeline">
+        <div class="step"><div class="num">1</div><h4>Παραγωγή</h4><p>Η ηλεκτρική ενέργεια παράγεται κυρίως στους σταθμούς παραγωγής της ΔΕΗ.</p></div>
+        <div class="step"><div class="num">2</div><h4>Υψηλή Τάση</h4><p>Αναχωρεί με Υψηλή Τάση 150kV ή 300kV για οικονομική μεταφορά σε μεγάλες αποστάσεις.</p></div>
+        <div class="step"><div class="num">3</div><h4>Υποσταθμοί Διανομής</h4><p>Στους υποσταθμούς υποβιβάζεται σε Μέση Τάση, συνήθως 20kV ή 15kV.</p></div>
+        <div class="step"><div class="num">4</div><h4>Κοντά στους καταναλωτές</h4><p>Μετασχηματιστές κατεβάζουν την τάση στα 230/400V, δηλαδή σε Χαμηλή Τάση.</p></div>
+        <div class="step"><div class="num">5</div><h4>Κατανάλωση</h4><p>Η ενέργεια φτάνει σε κατοικίες, αγροτικές, εμπορικές και βιοτεχνικές εγκαταστάσεις.</p></div>
+      </div>
+
+      <div class="value-grid">
+        <div class="value-box"><strong>150kV</strong><span>ή 300kV</span><div class="mini">Υψηλή Τάση μεταφοράς</div></div>
+        <div class="value-box"><strong>20kV</strong><span>ή 15kV</span><div class="mini">Μέση Τάση διανομής</div></div>
+        <div class="value-box"><strong>230V</strong><span>Φασική τάση</span><div class="mini">Χαμηλή Τάση</div></div>
+        <div class="value-box"><strong>400V</strong><span>Πολική τάση</span><div class="mini">Χαμηλή Τάση</div></div>
+      </div>
+
+      <div class="grid two" style="margin-top:18px">
+        <div class="diagram">
+          <svg viewBox="0 0 760 260" aria-hidden="true">
+            <defs>
+              <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#1f6fb2"/></marker>
+            </defs>
+            <rect x="20" y="90" width="120" height="90" rx="14" fill="#fff" stroke="#cfe0ef"/>
+            <text x="80" y="125" text-anchor="middle" font-size="20" font-weight="700" fill="#19324d">Σταθμός</text>
+            <text x="80" y="150" text-anchor="middle" font-size="20" font-weight="700" fill="#19324d">παραγωγής</text>
+
+            <line x1="142" y1="135" x2="280" y2="135" stroke="#1f6fb2" stroke-width="6" marker-end="url(#arrow)"/>
+            <text x="210" y="94" text-anchor="middle" font-size="24" font-weight="900" fill="#ef7d27">150 / 300 kV</text>
+
+            <rect x="285" y="90" width="135" height="90" rx="14" fill="#fff" stroke="#cfe0ef"/>
+            <text x="352" y="125" text-anchor="middle" font-size="20" font-weight="700" fill="#19324d">Υποσταθμός</text>
+            <text x="352" y="150" text-anchor="middle" font-size="20" font-weight="700" fill="#19324d">Διανομής</text>
+
+            <line x1="422" y1="135" x2="560" y2="135" stroke="#1f6fb2" stroke-width="6" marker-end="url(#arrow)"/>
+            <text x="490" y="94" text-anchor="middle" font-size="24" font-weight="900" fill="#ef7d27">20 / 15 kV</text>
+
+            <rect x="565" y="90" width="175" height="90" rx="14" fill="#fff" stroke="#cfe0ef"/>
+            <text x="652" y="125" text-anchor="middle" font-size="20" font-weight="700" fill="#19324d">Καταναλωτής</text>
+            <text x="652" y="150" text-anchor="middle" font-size="20" font-weight="700" fill="#19324d">230 / 400V</text>
+          </svg>
+        </div>
+        <div class="card">
+          <h3>Τι φέρνει η ΔΕΗ και τι αναλαμβάνει ο καταναλωτής;</h3>
+          <div class="checklist">
+            <div class="item"><strong>Υποχρέωση της ΔΕΗ</strong><span class="mini">Να φέρει την ηλεκτρική ενέργεια μέχρι τον μετρητή ηλεκτρικής ενέργειας.</span></div>
+            <div class="item"><strong>Από το μετρητή και μετά</strong><span class="mini">Ο καταναλωτής παραλαμβάνει την ενέργεια και τη διανέμει στο εσωτερικό του χώρου του.</span></div>
+            <div class="item"><strong>Εσωτερική ηλεκτρική εγκατάσταση</strong><span class="mini">Είναι η εγκατάσταση που απαιτείται για την παραλαβή, διανομή και χρησιμοποίηση της ενέργειας στον χώρο του καταναλωτή.</span></div>
+          </div>
+          <div class="note" style="margin-top:12px"><strong>Σημείωση:</strong> Νοσοκομεία, ξενοδοχεία και άλλα κρίσιμα κτίρια μπορεί να διαθέτουν και ηλεκτροπαραγωγό ζεύγος για περίπτωση διακοπής της παροχής.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="classification" class="panel">
+      <div class="section-head">
+        <div class="eyebrow">Μέρος 2</div>
+        <h2>Διάκριση εσωτερικών ηλεκτρικών εγκαταστάσεων</h2>
+        <p>Οι Ε.Η.Ε. διακρίνονται με βάση τον προορισμό, τον χώρο λειτουργίας και τις ειδικές συνθήκες του χώρου.</p>
+      </div>
+
+      <div class="grid three">
+        <div class="card">
+          <div class="badge">A</div>
+          <h3>Ανάλογα με τον προορισμό</h3>
+          <ul class="clean">
+            <li><strong>Εγκαταστάσεις φωτισμού</strong></li>
+            <li><strong>Εγκαταστάσεις κίνησης</strong></li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="badge">B</div>
+          <h3>Ανάλογα με τον χώρο λειτουργίας</h3>
+          <ul class="clean">
+            <li>Υπαίθρου</li>
+            <li>Οικοδομής κλειστού χώρου</li>
+            <li>Υπόγειες</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="badge">Γ</div>
+          <h3>Ανάλογα με τις συνθήκες λειτουργίας</h3>
+          <p>Η επιλογή υλικών και τρόπου εγκατάστασης εξαρτάται από την υγρασία, τη σκόνη, τα διαβρωτικά αέρια ή τον κίνδυνο έκρηξης.</p>
+        </div>
+      </div>
+
+      <div class="grid two" style="margin-top:18px">
+        <div class="card">
+          <h3>Παραδείγματα κατηγοριών χώρων</h3>
+          <div class="accordion">
+            <details open>
+              <summary>Ξηροί, πρόσκαιρα υγροί και υγροί χώροι</summary>
+              <ul class="clean">
+                <li><strong>Ξηροί χώροι:</strong> δεν παρουσιάζουν καθόλου υγρασία.</li>
+                <li><strong>Πρόσκαιρα υγροί χώροι:</strong> π.χ. λουτρά.</li>
+                <li><strong>Υγροί χώροι:</strong> π.χ. υπόγεια.</li>
+                <li><strong>Βρεγμένοι χώροι:</strong> π.χ. πλυντήρια.</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Χώροι με σκόνη ή διαβρωτικούς ατμούς</summary>
+              <ul class="clean">
+                <li>Χώροι που σκονίζονται: ξυλουργεία, αλευρόμυλοι.</li>
+                <li>Ρυπαροί χώροι ή χώροι με διαβρωτικούς ατμούς: ελαιοτριβεία, χημεία, χώροι φόρτισης συσσωρευτών.</li>
+              </ul>
+            </details>
+            <details>
+              <summary>Ειδικοί χώροι</summary>
+              <ul class="clean">
+                <li>Χώροι ηλεκτρικής υπηρεσίας, π.χ. υποσταθμοί.</li>
+                <li>Χώροι που κινδυνεύουν από εκρήξεις.</li>
+                <li>Στάβλοι, σιτοβολώνες και αχυρώνες.</li>
+                <li>Θέατρα, κινηματογράφοι και σκηνές θεάτρων.</li>
+              </ul>
+            </details>
+          </div>
+        </div>
+        <div class="card">
+          <h3>Βασικές απαιτήσεις μιας Ε.Η.Ε.</h3>
+          <div class="flash-grid" style="margin-top:10px">
+            <div class="flash-card"><h4>Ασφάλεια</h4><p>Η εγκατάσταση πρέπει να προστατεύει ανθρώπους και υλικά.</p></div>
+            <div class="flash-card"><h4>Λειτουργικότητα</h4><p>Να εξυπηρετεί σωστά τις ανάγκες του χρήστη.</p></div>
+            <div class="flash-card"><h4>Καλαισθησία</h4><p>Η όλη κατασκευή πρέπει να είναι προσεγμένη και σωστά τοποθετημένη.</p></div>
+            <div class="flash-card"><h4>Οικονομία</h4><p>Να επιτυγχάνεται σωστή λειτουργία με λογική δαπάνη χωρίς να θυσιάζεται η ασφάλεια.</p></div>
+          </div>
+          <div class="note" style="margin-top:12px"><strong>Παράδειγμα:</strong> Σε χώρους με κίνδυνο έκρηξης, οι διακόπτες τοποθετούνται έξω από τον χώρο. Στους στάβλους τοποθετούνται ψηλά και οι συσκευές είναι τάσης 42V.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="phases" class="panel">
+      <div class="section-head">
+        <div class="eyebrow">Μέρος 3</div>
+        <h2>Μονοφασικές και τριφασικές παροχές</h2>
+        <p>Στις Ε.Η.Ε. χρησιμοποιείται σχεδόν αποκλειστικά εναλλασσόμενο ρεύμα, επειδή μπορεί να μετασχηματίζεται και να μεταφέρεται πιο εύκολα.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <h3>Τριφασικό σύστημα με ουδέτερο</h3>
+          <ul class="clean">
+            <li>Η διανομή γίνεται με <strong>τέσσερις αγωγούς</strong>: τρεις φάσεων και έναν ουδέτερο.</li>
+            <li>Οι τρεις φάσεις συμβολίζονται σήμερα συνήθως με <strong>L<sub>1</sub>, L<sub>2</sub>, L<sub>3</sub></strong>.</li>
+            <li>Ο ουδέτερος συμβολίζεται σήμερα συνήθως με <strong>N</strong> (neutral).</li>
+            <li>Το σύστημα επιτρέπει δύο τιμές τάσης: <strong>230V</strong> και <strong>400V</strong>.</li>
+          </ul>
+        </div>
+        <div class="diagram">
+          <svg viewBox="0 0 560 300" aria-hidden="true">
+            <circle cx="280" cy="140" r="18" fill="#1f6fb2"/>
+            <line x1="280" y1="140" x2="280" y2="40" stroke="#1f6fb2" stroke-width="5"/>
+            <line x1="280" y1="140" x2="175" y2="230" stroke="#1f6fb2" stroke-width="5"/>
+            <line x1="280" y1="140" x2="385" y2="230" stroke="#1f6fb2" stroke-width="5"/>
+            <line x1="280" y1="140" x2="280" y2="270" stroke="#888" stroke-width="4" stroke-dasharray="8 8"/>
+
+            <circle cx="280" cy="40" r="10" fill="#ef7d27"/>
+            <circle cx="175" cy="230" r="10" fill="#ef7d27"/>
+            <circle cx="385" cy="230" r="10" fill="#ef7d27"/>
+            <circle cx="280" cy="270" r="10" fill="#5a718b"/>
+
+            <text x="292" y="38" font-size="20" font-weight="700" fill="#19324d">L<tspan baseline-shift="sub" font-size="14">1</tspan></text>
+            <text x="145" y="236" font-size="20" font-weight="700" fill="#19324d">L<tspan baseline-shift="sub" font-size="14">2</tspan></text>
+            <text x="398" y="236" font-size="20" font-weight="700" fill="#19324d">L<tspan baseline-shift="sub" font-size="14">3</tspan></text>
+            <text x="292" y="275" font-size="20" font-weight="700" fill="#19324d">N</text>
+
+            <text x="308" y="103" font-size="18" fill="#19324d">Uφ</text>
+            <text x="214" y="176" font-size="18" fill="#19324d">Uφ</text>
+            <text x="335" y="180" font-size="18" fill="#19324d">Uφ</text>
+
+            <path d="M280 40 Q340 85 385 230" fill="none" stroke="#ef7d27" stroke-width="3" stroke-dasharray="7 7"/>
+            <path d="M385 230 Q280 255 175 230" fill="none" stroke="#ef7d27" stroke-width="3" stroke-dasharray="7 7"/>
+            <path d="M175 230 Q220 85 280 40" fill="none" stroke="#ef7d27" stroke-width="3" stroke-dasharray="7 7"/>
+
+            <text x="332" y="118" font-size="18" fill="#ef7d27" font-weight="700">Uπ</text>
+            <text x="280" y="260" font-size="16" text-anchor="middle" fill="#5a718b">ουδέτερος</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="grid three" style="margin-top:18px">
+        <div class="card"><h3>Φασική τάση</h3><p>Είναι η τάση μεταξύ ουδέτερου και μιας φάσης. Στην πράξη έχει τιμή <strong>230V</strong>.</p></div>
+        <div class="card"><h3>Πολική τάση</h3><p>Είναι η τάση μεταξύ δύο φάσεων. Στην πράξη έχει τιμή <strong>400V</strong>.</p></div>
+        <div class="card"><h3>Σχέση τάσεων</h3><p>Σε σύνδεση κατά αστέρα ισχύει: <strong>Vπ = √3 · Vφ</strong>. Άρα 400 / 230 ≈ 1,73.</p></div>
+      </div>
+
+      <div class="note" style="margin-top:18px"><strong>Παρατήρηση:</strong> Το ρεύμα στον ουδέτερο αγωγό τείνει να μηδενιστεί όταν τα φορτία είναι σωστά κατανεμημένα και στις τρεις φάσεις.</div>
+      <div class="note" style="margin-top:12px"><strong>Σημείωση:</strong> Η διατομή των ουδέτερων αγωγών δεν πρέπει γενικά να είναι μικρότερη από εκείνη των αντίστοιχων αγωγών των φάσεων, εκτός από ειδικές περιπτώσεις που αναφέρει το βιβλίο.</div>
+    </section>
+
+    <section id="supplies" class="panel">
+      <div class="section-head">
+        <div class="eyebrow">Μέρος 4</div>
+        <h2>Παροχές κτιρίων</h2>
+        <p>Η επιλογή της παροχής εξαρτάται από την εγκατεστημένη ισχύ και το είδος των φορτίων.</p>
+      </div>
+
+      <div class="grid two">
+        <div class="card">
+          <div class="pill">Μονοφασική παροχή</div>
+          <h3 style="margin-top:10px">230V</h3>
+          <ul class="clean">
+            <li>Σήμερα διατίθενται συνήθως μονοφασικές παροχές ισχύος <strong>8 kW</strong> και <strong>12 kW</strong>.</li>
+            <li>Ο αγωγός φάσης <strong>L<sub>1</sub></strong> μπορεί να έχει χρώμα <strong>καφέ, μαύρο ή γκρι</strong>.</li>
+            <li>Ο ουδέτερος <strong>N</strong> είναι <strong>μπλε</strong> και ο αγωγός προστασίας <strong>PE</strong> είναι <strong>κιτρινοπράσινος</strong>.</li>
+            <li>Κατάλληλη για συνηθισμένες μικρές οικιακές ανάγκες.</li>
+          </ul>
+          <div class="diagram" style="margin-top:12px">
+            <svg viewBox="0 0 450 200" aria-hidden="true">
+              <line x1="85" y1="35" x2="85" y2="165" stroke="#111111" stroke-width="8"/>
+              <line x1="165" y1="35" x2="165" y2="165" stroke="#286cff" stroke-width="8"/>
+              <line x1="245" y1="35" x2="245" y2="165" stroke="#2e9f42" stroke-width="10"/>
+              <line x1="245" y1="35" x2="245" y2="165" stroke="#f1d300" stroke-width="5" stroke-dasharray="16 10"/>
+              <text x="85" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#111111">L<tspan baseline-shift="sub" font-size="12">1</tspan></text>
+              <text x="85" y="188" text-anchor="middle" font-size="12" fill="#59708a">ενδεικτικά μαύρο</text>
+              <text x="165" y="28" text-anchor="middle" font-size="18" font-weight="700" fill="#286cff">N</text>
+              <line x1="245" y1="8" x2="245" y2="16" stroke="#19324d" stroke-width="3"/>
+              <line x1="234" y1="16" x2="256" y2="16" stroke="#19324d" stroke-width="3"/>
+              <line x1="237" y1="22" x2="253" y2="22" stroke="#19324d" stroke-width="3"/>
+              <line x1="240" y1="28" x2="250" y2="28" stroke="#19324d" stroke-width="3"/>
+              <text x="272" y="27" font-size="16" font-weight="800" fill="#19324d">(PE)</text>
+              <rect x="312" y="60" width="100" height="72" rx="10" fill="#fff" stroke="#cfe0ef"/>
+              <text x="362" y="96" text-anchor="middle" font-size="18" font-weight="700">230 V</text>
+              <line x1="85" y1="96" x2="312" y2="96" stroke="#111111" stroke-width="5"/>
+              <line x1="165" y1="116" x2="312" y2="116" stroke="#286cff" stroke-width="5"/>
+              <line x1="245" y1="136" x2="312" y2="136" stroke="#2e9f42" stroke-width="7"/>
+              <line x1="245" y1="136" x2="312" y2="136" stroke="#f1d300" stroke-width="3" stroke-dasharray="12 8"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="pill">Τριφασική παροχή</div>
+          <h3 style="margin-top:10px">230 / 400V</h3>
+          <ul class="clean">
+            <li>Γίνεται με <strong>τέσσερις αγωγούς</strong> και αγωγό προστασίας <strong>PE</strong>.</li>
+            <li>Μπορεί να εξυπηρετεί ταυτόχρονα <strong>μονοφασικά και τριφασικά φορτία</strong>.</li>
+            <li>Χρησιμοποιείται στις πολυκατοικίες και σε εγκαταστάσεις φωτισμού και κίνησης.</li>
+          </ul>
+          <div class="diagram" style="margin-top:12px">
+            <svg viewBox="0 0 450 200" aria-hidden="true">
+              <line x1="55" y1="35" x2="55" y2="165" stroke="#7b4b2a" stroke-width="8"/>
+              <line x1="105" y1="35" x2="105" y2="165" stroke="#111111" stroke-width="8"/>
+              <line x1="155" y1="35" x2="155" y2="165" stroke="#8a8f98" stroke-width="8"/>
+              <line x1="215" y1="35" x2="215" y2="165" stroke="#286cff" stroke-width="8"/>
+              <line x1="275" y1="35" x2="275" y2="165" stroke="#2e9f42" stroke-width="10"/>
+              <line x1="275" y1="35" x2="275" y2="165" stroke="#f1d300" stroke-width="5" stroke-dasharray="16 10"/>
+              <text x="55" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#7b4b2a">L<tspan baseline-shift="sub" font-size="12">1</tspan></text>
+              <text x="105" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#111111">L<tspan baseline-shift="sub" font-size="12">2</tspan></text>
+              <text x="155" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#6f7680">L<tspan baseline-shift="sub" font-size="12">3</tspan></text>
+              <text x="215" y="28" text-anchor="middle" font-size="17" font-weight="700" fill="#286cff">N</text>
+              <line x1="275" y1="8" x2="275" y2="16" stroke="#19324d" stroke-width="3"/>
+              <line x1="264" y1="16" x2="286" y2="16" stroke="#19324d" stroke-width="3"/>
+              <line x1="267" y1="22" x2="283" y2="22" stroke="#19324d" stroke-width="3"/>
+              <line x1="270" y1="28" x2="280" y2="28" stroke="#19324d" stroke-width="3"/>
+              <text x="300" y="27" font-size="16" font-weight="800" fill="#19324d">(PE)</text>
+              <rect x="330" y="58" width="92" height="72" rx="10" fill="#fff" stroke="#cfe0ef"/>
+              <text x="376" y="88" text-anchor="middle" font-size="18" font-weight="700">230 / 400 V</text>
+              <text x="376" y="112" text-anchor="middle" font-size="14" fill="#59708a">παροχή</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-box">
+        <h3>Τι να θυμάσαι</h3>
+        <ul>
+          <li>Οι πολυκατοικίες ρευματοδοτούνται συνήθως με <strong>τριφασική παροχή με ουδέτερο 230/400V</strong>.</li>
+          <li>Η παροχή και η εγκατάσταση του μετρητή ηλεκτρικής ενέργειας είναι έργο της <strong>ΔΕΗ</strong>.</li>
+          <li>Η υποχρέωση της ΔΕΗ τελειώνει στον <strong>μετρητή</strong>.</li>
+          <li>Από τον μετρητή και μετά, ο πελάτης με δική του φροντίδα παραλαμβάνει και διανέμει την ενέργεια.</li>
+        </ul>
+      </div>
+    </section>
+
+
+    <section id="practice" class="panel">
+      <div class="section-head">
+        <div class="eyebrow">Διαδραστική εξάσκηση</div>
+        <h2>Έλεγξε όλη την ενότητα 1.4</h2>
+        <p>Οι ερωτήσεις καλύπτουν τη μεταφορά της ηλεκτρικής ενέργειας, τις κατηγορίες εγκαταστάσεων, τις τάσεις, τις παροχές κτιρίων και τα χρώματα των αγωγών.</p>
+      </div>
+
+      <div class="practice-summary">
+        <div><strong>22 ερωτήσεις</strong><div class="mini">Κάθε σωστή απάντηση δίνει 1 βαθμό.</div></div>
+        <div class="mini">Μπορείς να διορθώσεις τις απαντήσεις σου και να ξανακάνεις έλεγχο.</div>
+      </div>
+
+      <div class="practice-part">
+        <h3>Μέρος Α — Βασικές έννοιες και τάσεις</h3>
+        <div id="quizMC"></div>
+      </div>
+
+      <div class="practice-part">
+        <h3>Μέρος Β — Σωστό ή Λάθος</h3>
+        <div id="quizTF"></div>
+      </div>
+
+      <div class="practice-part">
+        <h3>Μέρος Γ — Χρώματα και συμβολισμοί αγωγών</h3>
+        <div class="note" style="margin-bottom:12px"><strong>Υπενθύμιση:</strong> Στα σχήματα της παρουσίασης χρησιμοποιούνται οι συμβολισμοί L<sub>1</sub>, L<sub>2</sub>, L<sub>3</sub>, N και <strong>PE</strong> για τον κιτρινοπράσινο αγωγό προστασίας.</div>
+        <div id="quizColors"></div>
+      </div>
+
+      <div class="practice-part">
+        <h3>Μέρος Δ — Εφαρμογές</h3>
+        <div id="quizApplications"></div>
+      </div>
+
+      <div class="quiz-actions">
+        <button class="btn orange" id="checkQuiz">Έλεγχος απαντήσεων</button>
+        <button class="btn secondary" id="resetQuiz">Νέα προσπάθεια</button>
+      </div>
+      <div class="score-box" id="scoreBox" aria-live="polite"></div>
+    </section>
+
+    <section id="recap" class="panel">
+      <div class="section-head">
+        <div class="eyebrow">Τελικό μέρος</div>
+        <h2>Ανακεφαλαίωση</h2>
+        <p>Συγκέντρωσε τα πιο βασικά σημεία της ενότητας 1.4.</p>
+      </div>
+
+      <div class="grid four">
+        <div class="card"><h3>1</h3><p>Η ενέργεια μεταφέρεται από τους σταθμούς παραγωγής με <strong>Υψηλή Τάση</strong>, περνά από υποσταθμούς και φτάνει στον καταναλωτή ως <strong>Χαμηλή Τάση 230/400V</strong>.</p></div>
+        <div class="card"><h3>2</h3><p>Οι Ε.Η.Ε. διακρίνονται ανάλογα με <strong>τον προορισμό</strong>, <strong>τον χώρο λειτουργίας</strong> και <strong>τις συνθήκες του χώρου</strong>.</p></div>
+        <div class="card"><h3>3</h3><p>Η <strong>φασική τάση</strong> είναι 230V και η <strong>πολική τάση</strong> είναι 400V. Ισχύει: <strong>Vπ = √3·Vφ</strong>.</p></div>
+        <div class="card"><h3>4</h3><p>Η μονοφασική παροχή διατίθεται συνήθως σε ισχύ <strong>8 kW</strong> ή <strong>12 kW</strong>, ενώ η τριφασική παροχή μπορεί να εξυπηρετεί ταυτόχρονα μονοφασικά και τριφασικά φορτία.</p></div>
+      </div>
+
+      <div class="card" style="margin-top:18px">
+        <h3>Γρήγορες ερωτήσεις επανάληψης</h3>
+        <div class="accordion">
+          <details>
+            <summary>1. Ποια είναι η διαφορά μεταξύ φασικής και πολικής τάσης;</summary>
+            <p>Η φασική τάση είναι μεταξύ ουδέτερου και μίας φάσης (230V), ενώ η πολική τάση είναι μεταξύ δύο φάσεων (400V).</p>
+          </details>
+          <details>
+            <summary>2. Πότε χρησιμοποιείται συνήθως μονοφασική παροχή;</summary>
+            <p>Σε συνηθισμένες οικιακές εγκαταστάσεις, με διαθέσιμες παροχές ισχύος 8 kW ή 12 kW.</p>
+          </details>
+          <details>
+            <summary>3. Τι σημαίνει ότι η ΔΕΗ "σταματά" στον μετρητή;</summary>
+            <p>Ότι η υποχρέωσή της είναι να φέρει το ρεύμα μέχρι τον μετρητή. Από εκεί και πέρα την εσωτερική διανομή την αναλαμβάνει ο καταναλωτής.</p>
+          </details>
+          <details>
+            <summary>4. Ποιες είναι οι βασικές απαιτήσεις μιας Ε.Η.Ε.;</summary>
+            <p>Ασφάλεια, λειτουργικότητα, καλαισθησία και οικονομία.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+  const panels=[...document.querySelectorAll('.panel')];
+  const navButtons=[...document.querySelectorAll('.nav button')];
+
+  function showPanel(id){
+    panels.forEach(p=>p.classList.toggle('active',p.id===id));
+    navButtons.forEach(b=>b.classList.toggle('active',b.dataset.page===id));
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  navButtons.forEach(btn=>btn.addEventListener('click',()=>showPanel(btn.dataset.page)));
+  document.querySelectorAll('[data-go]').forEach(btn=>btn.addEventListener('click',()=>showPanel(btn.dataset.go)));
+
+
+  // -------------------- Εξάσκηση κεφαλαίου 1.4 --------------------
+  const mcQuestions=[
+    {q:'Με ποιες τιμές Υψηλής Τάσης παρουσιάζεται η μεταφορά της ηλεκτρικής ενέργειας από τους σταθμούς παραγωγής;',o:['230 / 400 V','15 / 20 kV','150 / 300 kV','6 / 12 kV'],a:'150 / 300 kV'},
+    {q:'Σε ποιες τιμές υποβιβάζεται συνήθως η τάση στους Υποσταθμούς Διανομής;',o:['20 kV ή 15 kV','230 V ή 400 V','150 kV ή 300 kV','8 kW ή 12 kW'],a:'20 kV ή 15 kV'},
+    {q:'Μέχρι ποιο σημείο φτάνει η υποχρέωση της εταιρείας διανομής, σύμφωνα με την παρουσίαση;',o:['Μέχρι κάθε φωτιστικό','Μέχρι τον ηλεκτρικό πίνακα','Μέχρι τον μετρητή ηλεκτρικής ενέργειας','Μέχρι κάθε ρευματοδότη'],a:'Μέχρι τον μετρητή ηλεκτρικής ενέργειας'},
+    {q:'Ποια τάση επικρατεί μεταξύ μιας φάσης και του ουδέτερου;',o:['15 kV','230 V','400 V','300 kV'],a:'230 V'},
+    {q:'Ποια τάση επικρατεί μεταξύ δύο φάσεων;',o:['42 V','230 V','400 V','20 kV'],a:'400 V'},
+    {q:'Ποιες μονοφασικές παροχές ισχύος αναφέρονται στην ενημερωμένη παρουσίαση;',o:['4 kW και 6 kW','8 kW και 12 kW','12 kW και 20 kW','20 kW και 30 kW'],a:'8 kW και 12 kW'},
+    {q:'Τι μπορεί να εξυπηρετεί μια τριφασική παροχή με ουδέτερο;',o:['Μόνο φωτιστικά φορτία','Μόνο τριφασικά φορτία','Μόνο μονοφασικά φορτία','Μονοφασικά και τριφασικά φορτία'],a:'Μονοφασικά και τριφασικά φορτία'}
+  ];
+
+  const tfQuestions=[
+    {q:'Η εσωτερική ηλεκτρική εγκατάσταση από τον μετρητή και μετά είναι ιδιοκτησία και ευθύνη του καταναλωτή.',a:'Σωστό'},
+    {q:'Ο σύγχρονος συμβολισμός των τριών φάσεων είναι L₁, L₂ και L₃.',a:'Σωστό'},
+    {q:'Στο μονοφασικό σχέδιο της παρουσίασης ο ουδέτερος συμβολίζεται με N.',a:'Σωστό'},
+    {q:'Όταν τα φορτία είναι ισοκατανεμημένα στις τρεις φάσεις, το ρεύμα στον ουδέτερο τείνει να μηδενιστεί.',a:'Σωστό'},
+    {q:'Σε χώρο με κίνδυνο έκρηξης οι διακόπτες πρέπει να τοποθετούνται μέσα στον χώρο.',a:'Λάθος'}
+  ];
+
+  const colorOptions=['Καφέ, μαύρο ή γκρι','Καφέ','Μαύρο','Γκρι','Μπλε','Κιτρινοπράσινο'];
+  const colorQuestions=[
+    {q:'Μονοφασική παροχή — L₁',a:'Καφέ, μαύρο ή γκρι'},
+    {q:'Μονοφασική παροχή — N',a:'Μπλε'},
+    {q:'Τριφασική παροχή — L₁',a:'Καφέ'},
+    {q:'Τριφασική παροχή — L₂',a:'Μαύρο'},
+    {q:'Τριφασική παροχή — L₃',a:'Γκρι'},
+    {q:'Τριφασική παροχή — N',a:'Μπλε'},
+    {q:'Αγωγός προστασίας / γείωσης — PE',a:'Κιτρινοπράσινο'}
+  ];
+
+  const appQuestions=[
+    {type:'choice',q:'Σε μια μονοφασική παροχή κτιρίου με αγωγό προστασίας χρησιμοποιούνται οι αγωγοί:',o:['L₁ και N','L₁, N και PE','L₁ και L₂','N και PE μόνο'],a:'L₁, N και PE'},
+    {type:'choice',q:'Σε μια τριφασική παροχή κτιρίου με ουδέτερο και αγωγό προστασίας χρησιμοποιούνται οι αγωγοί:',o:['L₁ και N','L₁, L₂ και L₃','L₁, L₂, L₃, N και PE','N και PE μόνο'],a:'L₁, L₂, L₃, N και PE'},
+    {type:'number',q:'Αν η φασική τάση είναι 230 V, υπολόγισε την πολική τάση από τη σχέση Vπ = √3·Vφ. Δώσε αποτέλεσμα στρογγυλοποιημένο σε ακέραια V.',a:398,tol:2,unit:'V'}
+  ];
+
+  function escapeHtml(value){
+    return String(value).replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+  }
+
+  function renderRadioGroup(containerId,questions,prefix,optionsGetter){
+    const host=document.getElementById(containerId);
+    host.innerHTML='';
+    questions.forEach((item,index)=>{
+      const options=optionsGetter(item);
+      const card=document.createElement('div');
+      card.className='question';
+      card.dataset.kind=prefix;
+      card.dataset.index=index;
+      card.innerHTML=`<div class="q-title">${index+1}. ${item.q}</div>
+        <div class="options">${options.map(opt=>`<label class="option"><input type="radio" name="${prefix}_${index}" value="${escapeHtml(opt)}"> <span>${opt}</span></label>`).join('')}</div>
+        <div class="feedback"></div>`;
+      host.appendChild(card);
+    });
+  }
+
+  function renderSelectGroup(containerId,questions,options,prefix){
+    const host=document.getElementById(containerId);
+    host.innerHTML='';
+    questions.forEach((item,index)=>{
+      const card=document.createElement('div');
+      card.className='question';
+      card.dataset.kind=prefix;
+      card.dataset.index=index;
+      card.innerHTML=`<div class="q-title">${index+1}. ${item.q}</div>
+        <select id="${prefix}_${index}"><option value="">— επίλεξε —</option>${options.map(opt=>`<option value="${escapeHtml(opt)}">${opt}</option>`).join('')}</select>
+        <div class="feedback"></div>`;
+      host.appendChild(card);
+    });
+  }
+
+  function renderApplications(){
+    const host=document.getElementById('quizApplications');
+    host.innerHTML='';
+    appQuestions.forEach((item,index)=>{
+      const card=document.createElement('div');
+      card.className='question';
+      card.dataset.kind='app';
+      card.dataset.index=index;
+      if(item.type==='choice'){
+        card.innerHTML=`<div class="q-title">${index+1}. ${item.q}</div>
+          <div class="options">${item.o.map(opt=>`<label class="option"><input type="radio" name="app_${index}" value="${escapeHtml(opt)}"> <span>${opt}</span></label>`).join('')}</div>
+          <div class="feedback"></div>`;
+      }else{
+        card.innerHTML=`<div class="q-title">${index+1}. ${item.q}</div>
+          <input id="app_${index}" type="number" inputmode="decimal" placeholder="Αριθμητική απάντηση">
+          <div class="feedback"></div>`;
+      }
+      host.appendChild(card);
+    });
+  }
+
+  function renderQuiz(){
+    renderRadioGroup('quizMC',mcQuestions,'mc',q=>q.o);
+    renderRadioGroup('quizTF',tfQuestions,'tf',()=>['Σωστό','Λάθος']);
+    renderSelectGroup('quizColors',colorQuestions,colorOptions,'co');
+    renderApplications();
+    document.getElementById('scoreBox').classList.remove('show');
+    document.getElementById('scoreBox').textContent='';
+  }
+
+  function markCard(card,isCorrect,correctText){
+    card.classList.remove('correct','wrong');
+    card.classList.add(isCorrect?'correct':'wrong');
+    const feedback=card.querySelector('.feedback');
+    feedback.textContent=isCorrect?'✓ Σωστό':'✗ Σωστή απάντηση: '+correctText;
+  }
+
+  function checkQuiz(){
+    let score=0,total=0;
+
+    mcQuestions.forEach((q,i)=>{
+      total++;
+      const card=document.querySelector(`.question[data-kind="mc"][data-index="${i}"]`);
+      const selected=document.querySelector(`input[name="mc_${i}"]:checked`);
+      const ok=selected?.value===q.a;
+      if(ok) score++;
+      markCard(card,ok,q.a);
+    });
+
+    tfQuestions.forEach((q,i)=>{
+      total++;
+      const card=document.querySelector(`.question[data-kind="tf"][data-index="${i}"]`);
+      const selected=document.querySelector(`input[name="tf_${i}"]:checked`);
+      const ok=selected?.value===q.a;
+      if(ok) score++;
+      markCard(card,ok,q.a);
+    });
+
+    colorQuestions.forEach((q,i)=>{
+      total++;
+      const card=document.querySelector(`.question[data-kind="co"][data-index="${i}"]`);
+      const ok=document.getElementById(`co_${i}`).value===q.a;
+      if(ok) score++;
+      markCard(card,ok,q.a);
+    });
+
+    appQuestions.forEach((q,i)=>{
+      total++;
+      const card=document.querySelector(`.question[data-kind="app"][data-index="${i}"]`);
+      let ok=false;
+      if(q.type==='choice'){
+        const selected=document.querySelector(`input[name="app_${i}"]:checked`);
+        ok=selected?.value===q.a;
+      }else{
+        const value=Number(document.getElementById(`app_${i}`).value);
+        ok=Number.isFinite(value)&&Math.abs(value-q.a)<=q.tol;
+      }
+      if(ok) score++;
+      markCard(card,ok,q.type==='number'?`${q.a} ${q.unit} περίπου`:q.a);
+    });
+
+    const percent=Math.round(score/total*100);
+    const message=percent>=90?'Εξαιρετική επίδοση!':percent>=70?'Πολύ καλή επίδοση.':percent>=50?'Καλή προσπάθεια — δες τις διορθώσεις.':'Χρειάζεται μία ακόμη επανάληψη της παρουσίασης.';
+    const scoreBox=document.getElementById('scoreBox');
+    scoreBox.textContent=`Βαθμολογία: ${score} / ${total} (${percent}%) — ${message}`;
+    scoreBox.classList.add('show');
+    scoreBox.scrollIntoView({behavior:'smooth',block:'center'});
+  }
+
+  document.getElementById('checkQuiz').addEventListener('click',checkQuiz);
+  document.getElementById('resetQuiz').addEventListener('click',()=>{
+    renderQuiz();
+    document.getElementById('practice').scrollIntoView({behavior:'smooth'});
+  });
+  renderQuiz();
+</script>
+</body>
+</html>
