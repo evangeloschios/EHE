@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Τεστ Αξιολόγησης – Ρευματοδότηση Ηλεκτρικών Εγκαταστάσεων</title>
+<style>
+:root{
+  --bg:#f3f7fb; --card:#fff; --ink:#18324a; --muted:#60758a; --line:#d7e2ec;
+  --blue:#1f6fb2; --blue2:#eaf4ff; --orange:#e87824; --good:#16835c; --bad:#c23b3b;
+}
+*{box-sizing:border-box}
+body{
+  margin:0; font-family:Segoe UI,Arial,sans-serif; color:var(--ink);
+  background:linear-gradient(180deg,#f8fbff 0,#edf4fa 55%,#f8fbff 100%);
+}
+.wrap{max-width:980px;margin:auto;padding:18px}
+header{
+  background:linear-gradient(135deg,#143a5b,#1f6fb2); color:#fff; border-radius:22px;
+  padding:26px 26px 22px; box-shadow:0 12px 30px rgba(20,58,91,.18); margin-bottom:18px;
+}
+header .kicker{font-weight:800;letter-spacing:.08em;text-transform:uppercase;font-size:13px;opacity:.9}
+header h1{margin:8px 0 6px;font-size:clamp(26px,4vw,42px);line-height:1.1}
+header p{margin:0;opacity:.92;line-height:1.55}
+.meta{
+  display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px;margin-top:20px
+}
+.meta label{font-size:13px;font-weight:800;display:block;margin-bottom:5px;color:#eef7ff}
+.meta input{
+  width:100%;border:0;border-radius:11px;padding:11px 12px;font:inherit;color:#18324a;background:#fff
+}
+.info,.section,.result,.submit-box{
+  background:var(--card);border:1px solid var(--line);border-radius:18px;
+  box-shadow:0 6px 18px rgba(24,50,74,.08)
+}
+.info{padding:16px 18px;margin-bottom:18px;line-height:1.6}
+.info strong{color:var(--blue)}
+.section{padding:20px;margin:18px 0}
+.section h2{margin:0 0 5px;font-size:24px}
+.section .sub{color:var(--muted);margin-bottom:16px}
+.question{
+  border:1px solid var(--line);border-radius:15px;padding:16px;margin:12px 0;background:#fcfdff
+}
+.question.correct{border-color:#78c9aa;background:#f4fff9}
+.question.wrong{border-color:#e59a9a;background:#fff7f7}
+.qhead{font-weight:800;line-height:1.45;margin-bottom:11px}
+.options{display:grid;gap:8px}
+.option{
+  display:flex;gap:9px;align-items:flex-start;padding:10px 11px;border:1px solid #dfe7ef;
+  border-radius:11px;background:#fff;cursor:pointer;line-height:1.42
+}
+.option:hover{background:#f2f8fd}
+.option input{margin-top:3px;transform:scale(1.08)}
+.feedback{min-height:20px;margin-top:10px;font-weight:800}
+.correct .feedback{color:var(--good)}
+.wrong .feedback{color:var(--bad)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin:20px 0}
+button{
+  border:0;border-radius:12px;padding:12px 18px;font:inherit;font-weight:900;cursor:pointer
+}
+button.primary{background:var(--orange);color:#fff}
+button.secondary{background:var(--blue);color:#fff}
+button.ghost{background:#fff;color:var(--blue);border:2px solid var(--blue)}
+button:disabled{opacity:.45;cursor:not-allowed}
+.result{display:none;padding:20px;margin:18px 0;background:#163b5d;color:#fff}
+.result.show{display:block}
+.result .big{font-size:30px;font-weight:900;margin-bottom:5px}
+.result .small{opacity:.9}
+.submit-box{padding:18px;margin:18px 0}
+.submit-box h3{margin:0 0 8px}
+.status{margin-top:10px;font-weight:800;line-height:1.5}
+.note{font-size:13px;color:var(--muted);line-height:1.5}
+.author{text-align:right;color:var(--muted);font-weight:800;margin:18px 4px}
+@media(max-width:700px){
+  .meta{grid-template-columns:1fr}
+  header{padding:22px 18px}
+  .section{padding:16px 13px}
+}
+@media print{
+  body{background:#fff}.actions,.submit-box{display:none!important}
+  .section,.info,.result{box-shadow:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="kicker">Β΄ ΕΠΑ.Λ. • Ηλεκτρικές Εγκαταστάσεις</div>
+    <h1>Τεστ Αξιολόγησης — Ρευματοδότηση Ηλεκτρικών Εγκαταστάσεων</h1>
+    <p>Κεφάλαιο 1.4 • Μεταφορά ηλεκτρικής ενέργειας • Εσωτερικές ηλεκτρικές εγκαταστάσεις • Μονοφασικές και τριφασικές παροχές</p>
+    <div class="meta">
+      <div><label for="studentName">Ονοματεπώνυμο</label><input id="studentName" autocomplete="name"></div>
+      <div><label for="studentClass">Τμήμα</label><input id="studentClass" placeholder="π.χ. Β1"></div>
+      <div><label for="testDate">Ημερομηνία</label><input id="testDate" type="date"></div>
+    </div>
+  </header>
+
+  <div class="info">
+    <strong>Οδηγίες:</strong> Απάντησε και στις 20 ερωτήσεις. Κάθε σωστή απάντηση δίνει 1 μονάδα.
+    Με τον <strong>Οριστικό έλεγχο</strong> το τεστ βαθμολογείται, οι απαντήσεις κλειδώνουν και δεν μπορείς να ξανακάνεις έλεγχο.
+    Μετά ενεργοποιείται η <strong>Υποβολή στο Drive</strong>.
+  </div>
+
+  <section class="section">
+    <h2>Μέρος Α — Πολλαπλής επιλογής</h2>
+    <div class="sub">14 ερωτήσεις • 14 μονάδες</div>
+    <div id="mcHost"></div>
+  </section>
+
+  <section class="section">
+    <h2>Μέρος Β — Σωστό ή Λάθος</h2>
+    <div class="sub">6 ερωτήσεις • 6 μονάδες</div>
+    <div id="tfHost"></div>
+  </section>
+
+  <div class="actions">
+    <button id="gradeBtn" class="primary">Οριστικός έλεγχος</button>
+    <button class="ghost" type="button" onclick="window.print()">Εκτύπωση</button>
+  </div>
+
+  <div id="resultBox" class="result" aria-live="polite"></div>
+
+  <div class="submit-box">
+    <h3>Υποβολή αποτελέσματος στο Google Drive</h3>
+    <div class="note">Η υποβολή ενεργοποιείται μόνο μετά την οριστική βαθμολόγηση. Θα ανοίξει νέα καρτέλα επιβεβαίωσης.</div>
+    <div class="actions" style="margin-bottom:0">
+      <button id="submitBtn" class="secondary" disabled>Υποβολή στο Drive</button>
+    </div>
+    <div id="submitStatus" class="status"></div>
+  </div>
+
+  <div class="author">Ε. Κοκκώδης</div>
+</div>
+
+<script>
+const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbwLxjjxI9PWRlpNiBRtG_8Qd4k1Arv0u0g5FZYYXGyEfacnCPnWGY1HiJcjAphA9-YU/exec";
+const QUIZ_CODE = "EHE_B_1_4_REVMATODOTISI_2026";
+const QUIZ_TITLE = "Τεστ Αξιολόγησης – Ρευματοδότηση Ηλεκτρικών Εγκαταστάσεων (Κεφάλαιο 1.4)";
+
+const mcQuestions = [
+  {
+    q:"Με ποιες τιμές Υψηλής Τάσης παρουσιάζεται η μεταφορά της ηλεκτρικής ενέργειας από τους σταθμούς παραγωγής;",
+    options:["150 kV ή 300 kV","15 kV ή 20 kV","230 V ή 400 V","8 kW ή 12 kW"],
+    answer:"150 kV ή 300 kV"
+  },
+  {
+    q:"Σε ποιες τιμές υποβιβάζεται συνήθως η τάση στους Υποσταθμούς Διανομής;",
+    options:["15 kV ή 20 kV","150 kV ή 300 kV","230 V ή 400 V","42 V ή 230 V"],
+    answer:"15 kV ή 20 kV"
+  },
+  {
+    q:"Σε ποια επίπεδα τάσης φτάνει τελικά η ηλεκτρική ενέργεια στους καταναλωτές Χαμηλής Τάσης;",
+    options:["230/400 V","15/20 kV","150/300 kV","8/12 kV"],
+    answer:"230/400 V"
+  },
+  {
+    q:"Ποια χαρακτηριστικά δικτύου αναφέρονται στην παρουσίαση;",
+    options:["230/400 V – 50 Hz","230/400 V – 60 Hz","120/230 V – 50 Hz","400/690 V – 50 Hz"],
+    answer:"230/400 V – 50 Hz"
+  },
+  {
+    q:"Μέχρι ποιο σημείο φτάνει η υποχρέωση της ΔΕΗ σύμφωνα με το διδακτικό υλικό;",
+    options:["Μέχρι τον μετρητή ηλεκτρικής ενέργειας","Μέχρι τον γενικό πίνακα του διαμερίσματος","Μέχρι κάθε ρευματοδότη","Μέχρι κάθε ηλεκτρική συσκευή"],
+    answer:"Μέχρι τον μετρητή ηλεκτρικής ενέργειας"
+  },
+  {
+    q:"Ποια περιγραφή αποδίδει σωστά την εσωτερική ηλεκτρική εγκατάσταση;",
+    options:[
+      "Η εγκατάσταση για παραλαβή, διανομή και χρησιμοποίηση της ηλεκτρικής ενέργειας στο εσωτερικό του καταναλωτή",
+      "Μόνο το δίκτυο Μέσης Τάσης πριν από τον μετασχηματιστή",
+      "Μόνο ο μετρητής ηλεκτρικής ενέργειας",
+      "Μόνο τα κυκλώματα φωτισμού ενός κτιρίου"
+    ],
+    answer:"Η εγκατάσταση για παραλαβή, διανομή και χρησιμοποίηση της ηλεκτρικής ενέργειας στο εσωτερικό του καταναλωτή"
+  },
+  {
+    q:"Ανάλογα με τον προορισμό τους, οι εσωτερικές ηλεκτρικές εγκαταστάσεις διακρίνονται κυρίως σε:",
+    options:["Εγκαταστάσεις φωτισμού και κίνησης","Εναέριες και υπόγειες","Μονοφασικές και συνεχούς ρεύματος","Ξηρές και βρεγμένες μόνο"],
+    answer:"Εγκαταστάσεις φωτισμού και κίνησης"
+  },
+  {
+    q:"Ανάλογα με τον χώρο λειτουργίας τους, οι εσωτερικές ηλεκτρικές εγκαταστάσεις μπορεί να είναι:",
+    options:["Υπαίθρου, κλειστού χώρου και υπόγειες","Φωτισμού και κίνησης","Μόνο οικιακές και βιομηχανικές","Μόνο ξηρών και υγρών χώρων"],
+    answer:"Υπαίθρου, κλειστού χώρου και υπόγειες"
+  },
+  {
+    q:"Ποια από τις παρακάτω ΔΕΝ είναι μία από τις τέσσερις βασικές απαιτήσεις μιας Ε.Η.Ε. που αναφέρονται στο υλικό;",
+    options:["Μέγιστη κατανάλωση ενέργειας","Ασφάλεια","Λειτουργικότητα","Οικονομία"],
+    answer:"Μέγιστη κατανάλωση ενέργειας"
+  },
+  {
+    q:"Στο τριφασικό σύστημα με ουδέτερο, η διανομή πριν υπολογίσουμε τον αγωγό προστασίας PE γίνεται με:",
+    options:["Τρεις φάσεις και έναν ουδέτερο","Μία φάση και έναν ουδέτερο","Τρεις φάσεις χωρίς ουδέτερο","Δύο φάσεις και δύο ουδέτερους"],
+    answer:"Τρεις φάσεις και έναν ουδέτερο"
+  },
+  {
+    q:"Ποια είναι η φασική τάση στο σύστημα 230/400 V;",
+    options:["230 V","400 V","20 kV","150 kV"],
+    answer:"230 V"
+  },
+  {
+    q:"Ποια είναι η πολική τάση στο σύστημα 230/400 V;",
+    options:["400 V","230 V","20 kV","300 kV"],
+    answer:"400 V"
+  },
+  {
+    q:"Σε μονοφασική παροχή κτιρίου με αγωγό προστασίας χρησιμοποιούνται:",
+    options:["L₁, N και PE","L₁ και L₂ μόνο","L₁, L₂, L₃ και N","N και PE μόνο"],
+    answer:"L₁, N και PE"
+  },
+  {
+    q:"Ποιος συνδυασμός χρωμάτων είναι σωστός για ουδέτερο N και αγωγό προστασίας PE;",
+    options:["N: μπλε — PE: κιτρινοπράσινο","N: κιτρινοπράσινο — PE: μπλε","N: μαύρο — PE: γκρι","N: καφέ — PE: μπλε"],
+    answer:"N: μπλε — PE: κιτρινοπράσινο"
+  }
+];
+
+const tfQuestions = [
+  {q:"Η τριφασική παροχή μπορεί να εξυπηρετεί ταυτόχρονα μονοφασικά και τριφασικά φορτία.", answer:"Σωστό"},
+  {q:"Οι μονοφασικές παροχές που αναφέρονται στο υλικό είναι 8 kW και 12 kW.", answer:"Σωστό"},
+  {q:"Η φασική τάση μετριέται μεταξύ δύο φάσεων.", answer:"Λάθος"},
+  {q:"Όταν τα φορτία είναι σωστά κατανεμημένα στις τρεις φάσεις, το ρεύμα στον ουδέτερο τείνει να μηδενιστεί.", answer:"Σωστό"},
+  {q:"Σε χώρους με κίνδυνο έκρηξης, οι διακόπτες τοποθετούνται έξω από τον χώρο.", answer:"Σωστό"},
+  {q:"Νοσοκομεία και ξενοδοχεία μπορεί να διαθέτουν ηλεκτροπαραγωγό ζεύγος για περίπτωση διακοπής της παροχής.", answer:"Σωστό"}
+];
+
+let graded = false;
+let submitted = false;
+let finalScore = 0;
+let finalPercentage = 0;
+let renderedMC = [];
+let renderedTF = [];
+
+function shuffle(arr){
+  const a=[...arr];
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [a[i],a[j]]=[a[j],a[i]];
+  }
+  return a;
+}
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, ch => ({
+    '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+  }[ch]));
+}
+function render(){
+  renderedMC = shuffle(mcQuestions).map(q=>({...q, options:shuffle(q.options)}));
+  renderedTF = shuffle(tfQuestions);
+
+  const mcHost=document.getElementById("mcHost");
+  const tfHost=document.getElementById("tfHost");
+
+  renderedMC.forEach((item,i)=>{
+    const card=document.createElement("div");
+    card.className="question";
+    card.dataset.group="mc";
+    card.dataset.index=i;
+    card.innerHTML = `
+      <div class="qhead">${i+1}. ${escapeHtml(item.q)}</div>
+      <div class="options">
+        ${item.options.map(opt=>`
+          <label class="option">
+            <input type="radio" name="mc_${i}" value="${escapeHtml(opt)}">
+            <span>${escapeHtml(opt)}</span>
+          </label>`).join("")}
+      </div>
+      <div class="feedback"></div>`;
+    mcHost.appendChild(card);
+  });
+
+  renderedTF.forEach((item,i)=>{
+    const card=document.createElement("div");
+    card.className="question";
+    card.dataset.group="tf";
+    card.dataset.index=i;
+    card.innerHTML = `
+      <div class="qhead">${i+1}. ${escapeHtml(item.q)}</div>
+      <div class="options">
+        ${["Σωστό","Λάθος"].map(opt=>`
+          <label class="option">
+            <input type="radio" name="tf_${i}" value="${opt}">
+            <span>${opt}</span>
+          </label>`).join("")}
+      </div>
+      <div class="feedback"></div>`;
+    tfHost.appendChild(card);
+  });
+
+  const d=new Date();
+  const local=new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10);
+  document.getElementById("testDate").value=local;
+}
+function studentDataOk(){
+  const name=document.getElementById("studentName").value.trim();
+  const cls=document.getElementById("studentClass").value.trim();
+  const date=document.getElementById("testDate").value;
+  if(!name || !cls || !date){
+    alert("Συμπλήρωσε Ονοματεπώνυμο, Τμήμα και Ημερομηνία.");
+    return false;
+  }
+  return true;
+}
+function allAnswered(){
+  for(let i=0;i<renderedMC.length;i++){
+    if(!document.querySelector(`input[name="mc_${i}"]:checked`)) return false;
+  }
+  for(let i=0;i<renderedTF.length;i++){
+    if(!document.querySelector(`input[name="tf_${i}"]:checked`)) return false;
+  }
+  return true;
+}
+function mark(card, ok, correct){
+  card.classList.remove("correct","wrong");
+  card.classList.add(ok ? "correct" : "wrong");
+  const fb=card.querySelector(".feedback");
+  fb.textContent = ok ? "✓ Σωστό" : "✗ Λάθος — Σωστή απάντηση: " + correct;
+}
+function lockTest(){
+  document.querySelectorAll('input[type="radio"]').forEach(el=>el.disabled=true);
+  ["studentName","studentClass","testDate"].forEach(id=>document.getElementById(id).disabled=true);
+  document.getElementById("gradeBtn").disabled=true;
+}
+function grade(){
+  if(graded) return;
+  if(!studentDataOk()) return;
+  if(!allAnswered()){
+    alert("Απάντησε και στις 20 ερωτήσεις πριν από τον οριστικό έλεγχο.");
+    return;
+  }
+  if(!confirm("Ο οριστικός έλεγχος θα κλειδώσει τις απαντήσεις. Συνέχεια;")) return;
+
+  let score=0;
+  renderedMC.forEach((q,i)=>{
+    const chosen=document.querySelector(`input[name="mc_${i}"]:checked`).value;
+    const ok=chosen===q.answer;
+    if(ok) score++;
+    mark(document.querySelector(`.question[data-group="mc"][data-index="${i}"]`),ok,q.answer);
+  });
+  renderedTF.forEach((q,i)=>{
+    const chosen=document.querySelector(`input[name="tf_${i}"]:checked`).value;
+    const ok=chosen===q.answer;
+    if(ok) score++;
+    mark(document.querySelector(`.question[data-group="tf"][data-index="${i}"]`),ok,q.answer);
+  });
+
+  finalScore=score;
+  finalPercentage=Math.round(score/20*100);
+  graded=true;
+  lockTest();
+
+  const box=document.getElementById("resultBox");
+  box.classList.add("show");
+  box.innerHTML=`
+    <div class="big">Βαθμός: ${score}/20</div>
+    <div class="small">Ποσοστό επιτυχίας: ${finalPercentage}%</div>
+  `;
+  document.getElementById("submitBtn").disabled=false;
+  box.scrollIntoView({behavior:"smooth",block:"center"});
+}
+function buildAnswerData(){
+  const rows=[];
+  renderedMC.forEach((q,i)=>{
+    const chosen=document.querySelector(`input[name="mc_${i}"]:checked`)?.value || "";
+    rows.push({
+      part:"Α", number:i+1, question:q.q, answer:chosen,
+      correct:q.answer, isCorrect:chosen===q.answer
+    });
+  });
+  renderedTF.forEach((q,i)=>{
+    const chosen=document.querySelector(`input[name="tf_${i}"]:checked`)?.value || "";
+    rows.push({
+      part:"Β", number:i+1, question:q.q, answer:chosen,
+      correct:q.answer, isCorrect:chosen===q.answer
+    });
+  });
+  return rows;
+}
+function buildResultsHtml(){
+  const name=document.getElementById("studentName").value.trim();
+  const cls=document.getElementById("studentClass").value.trim();
+  const date=document.getElementById("testDate").value;
+  const rows=buildAnswerData();
+
+  const resultRows=rows.map(r=>`
+    <tr>
+      <td>${escapeHtml(r.part)}${r.number}</td>
+      <td>${escapeHtml(r.question)}</td>
+      <td>${escapeHtml(r.answer)}</td>
+      <td>${escapeHtml(r.correct)}</td>
+      <td>${r.isCorrect ? "Σωστό" : "Λάθος"}</td>
+    </tr>`).join("");
+
+  return `<!DOCTYPE html>
+<html lang="el"><head><meta charset="UTF-8"><title>${escapeHtml(QUIZ_TITLE)}</title>
+<style>
+body{font-family:Arial,sans-serif;margin:28px;color:#18324a}
+h1{margin-bottom:4px}.meta{margin:14px 0 20px;line-height:1.7}
+.score{font-size:24px;font-weight:800;margin:16px 0}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{border:1px solid #cfd9e3;padding:8px;vertical-align:top}
+th{background:#edf5fb}
+</style></head><body>
+<h1>${escapeHtml(QUIZ_TITLE)}</h1>
+<div class="meta"><b>Ονοματεπώνυμο:</b> ${escapeHtml(name)}<br>
+<b>Τμήμα:</b> ${escapeHtml(cls)}<br><b>Ημερομηνία:</b> ${escapeHtml(date)}</div>
+<div class="score">Βαθμός: ${finalScore}/20 — ${finalPercentage}%</div>
+<table><thead><tr><th>#</th><th>Ερώτηση</th><th>Απάντηση μαθητή</th><th>Σωστή απάντηση</th><th>Αποτέλεσμα</th></tr></thead>
+<tbody>${resultRows}</tbody></table>
+<p style="margin-top:22px;font-weight:bold">Ε. Κοκκώδης</p>
+</body></html>`;
+}
+function addHidden(form,name,value){
+  const inp=document.createElement("input");
+  inp.type="hidden"; inp.name=name; inp.value=value;
+  form.appendChild(inp);
+}
+function submitToDrive(){
+  if(!graded || submitted) return;
+  const name=document.getElementById("studentName").value.trim();
+  const cls=document.getElementById("studentClass").value.trim();
+  const date=document.getElementById("testDate").value;
+  const answers=buildAnswerData();
+  const resultsHtml=buildResultsHtml();
+
+  const popup=window.open("","submissionWindow");
+  if(popup){
+    popup.document.write("<p style='font-family:Arial;padding:20px'>Γίνεται υποβολή στο Google Drive...</p>");
+    popup.document.close();
+  }
+
+  const form=document.createElement("form");
+  form.method="POST";
+  form.action=WEB_APP_URL;
+  form.target="submissionWindow";
+  form.style.display="none";
+
+  addHidden(form,"quizCode",QUIZ_CODE);
+  addHidden(form,"quizTitle",QUIZ_TITLE);
+  addHidden(form,"name",name);
+  addHidden(form,"studentName",name);
+  addHidden(form,"class",cls);
+  addHidden(form,"section",cls);
+  addHidden(form,"date",date);
+  addHidden(form,"score",String(finalScore));
+  addHidden(form,"score20",String(finalScore));
+  addHidden(form,"percentage",String(finalPercentage));
+  addHidden(form,"answers",JSON.stringify(answers));
+  addHidden(form,"html",resultsHtml);
+
+  document.body.appendChild(form);
+  form.submit();
+  form.remove();
+
+  submitted=true;
+  document.getElementById("submitBtn").disabled=true;
+  document.getElementById("submitStatus").innerHTML =
+    "Η υποβολή στάλθηκε. <strong>Θεώρησέ την επιτυχή μόνο αν η νέα καρτέλα εμφανίσει μήνυμα OK ότι αποθηκεύτηκε στο Google Drive.</strong>";
+}
+document.getElementById("gradeBtn").addEventListener("click",grade);
+document.getElementById("submitBtn").addEventListener("click",submitToDrive);
+render();
+</script>
+</body>
+</html>
