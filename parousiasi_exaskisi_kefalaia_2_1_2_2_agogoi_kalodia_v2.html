@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Κεφάλαια 2.1–2.2 — Αγωγοί και Καλώδια</title>
+<style>
+:root{
+  --ink:#17324d;--muted:#566d82;--blue:#1d6fae;--blue2:#eaf5fd;
+  --teal:#098a84;--teal2:#e8f7f5;--orange:#ef7d27;--orange2:#fff2e8;
+  --green:#14875f;--green2:#e9f8f1;--red:#c44141;--red2:#fff0f0;
+  --yellow:#f3c63f;--paper:#fff;--bg:#f3f7fb;--line:#d8e3ed;
+  --shadow:0 12px 30px rgba(23,50,77,.11);--radius:20px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",Arial,sans-serif;
+  color:var(--ink);background:
+  radial-gradient(circle at 0 0,rgba(239,125,39,.12),transparent 28rem),
+  radial-gradient(circle at 100% 15%,rgba(9,138,132,.12),transparent 30rem),var(--bg);
+}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{max-width:1280px;margin:auto;padding:16px}
+.topbar{
+  position:sticky;top:9px;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border:1px solid var(--line);
+  border-radius:18px;padding:12px 16px;box-shadow:var(--shadow);margin-bottom:16px
+}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{width:50px;height:50px;flex:0 0 auto;border-radius:15px;display:grid;place-items:center;color:#fff;font-weight:950;font-size:24px;background:linear-gradient(135deg,var(--teal),#22b3a8);box-shadow:0 8px 18px rgba(9,138,132,.25)}
+.brand h1{font-size:clamp(17px,2.2vw,24px);line-height:1.15;margin:0}.brand small{display:block;color:var(--muted);margin-top:3px}.author{font-weight:800;color:var(--muted);white-space:nowrap}
+.nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px;box-shadow:0 5px 18px rgba(23,50,77,.07)}
+.nav button{border:0;background:#edf4f9;color:var(--ink);font-weight:800;padding:10px 13px;border-radius:12px;transition:.18s}.nav button:hover{transform:translateY(-1px);background:#e3eef6}.nav button.active{background:var(--blue);color:#fff;box-shadow:0 7px 16px rgba(29,111,174,.23)}
+.panel{display:none;animation:fade .25s ease}.panel.active{display:block}@keyframes fade{from{opacity:.1;transform:translateY(5px)}to{opacity:1;transform:none}}
+.hero{position:relative;overflow:hidden;background:linear-gradient(135deg,#fff,#f8fffe 52%,#edf7ff);border:1px solid var(--line);border-radius:28px;padding:clamp(26px,5vw,62px);box-shadow:var(--shadow)}
+.hero:after{content:"";position:absolute;right:-85px;top:-90px;width:270px;height:270px;border:40px solid rgba(9,138,132,.08);border-radius:50%}.eyebrow{color:var(--orange);font-weight:950;letter-spacing:.08em;text-transform:uppercase}.hero h2{font-size:clamp(36px,6vw,68px);line-height:1.03;margin:10px 0 18px;max-width:900px}.hero p{font-size:clamp(17px,2vw,22px);line-height:1.58;color:var(--muted);max-width:860px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+.btn{border:0;border-radius:13px;padding:12px 18px;font-weight:900;background:var(--blue);color:#fff;box-shadow:0 7px 16px rgba(29,111,174,.22)}.btn:hover{filter:brightness(1.04);transform:translateY(-1px)}.btn.orange{background:var(--orange);box-shadow:0 7px 16px rgba(239,125,39,.22)}.btn.secondary{background:#fff;color:var(--blue);border:2px solid var(--blue);box-shadow:none}
+.section-head{margin:8px 0 22px}.section-head h2{font-size:clamp(28px,4vw,48px);margin:2px 0 8px}.section-head p{font-size:18px;color:var(--muted);line-height:1.55;margin:0}
+.grid{display:grid;gap:18px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card,.tool,.question{background:#fff;border:1px solid var(--line);border-radius:var(--radius);box-shadow:0 7px 22px rgba(23,50,77,.075)}.card,.tool{padding:20px}.card h3,.tool h3{margin:0 0 12px;font-size:22px}.card p,.tool p{color:var(--muted);line-height:1.58}.card ul{padding-left:20px}.card li{margin:8px 0;line-height:1.5}
+.objectives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;list-style:none;padding:0;margin:18px 0 0}.objectives li{background:#fff;border:1px solid var(--line);border-left:5px solid var(--orange);border-radius:14px;padding:14px 16px;line-height:1.45}
+.compare-card{min-height:250px;position:relative;overflow:hidden}.compare-card .tag{display:inline-block;border-radius:999px;padding:5px 10px;font-size:13px;font-weight:900;background:var(--teal2);color:var(--teal)}.compare-card svg{width:100%;height:115px;margin:10px 0;display:block}.compare-card strong{font-size:20px}.compare-card p{margin-bottom:0}
+.note{border-left:5px solid var(--yellow);background:#fff9df;border-radius:14px;padding:14px 16px;line-height:1.52;margin:16px 0}.note strong{color:#7c5a00}.good-note{border-left-color:var(--green);background:var(--green2)}
+.keyline{display:flex;gap:12px;align-items:flex-start;background:#f8fbfd;border:1px solid var(--line);border-radius:14px;padding:13px;margin:10px 0}.keyline .n{flex:0 0 36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--blue);color:#fff;font-weight:900}.keyline strong{display:block;margin-bottom:3px}.keyline span{color:var(--muted);line-height:1.45}
+.cross-section{display:grid;grid-template-columns:minmax(260px,.8fr) 1.2fr;gap:24px;align-items:center}.cross-section svg{width:100%;height:auto}.layer-list{display:grid;gap:9px}.layer{display:flex;align-items:center;gap:10px;background:#f7fafc;border:1px solid var(--line);padding:11px 13px;border-radius:12px}.dot{width:18px;height:18px;border-radius:50%;flex:0 0 auto}.copper{background:#bd6a32}.insulation{background:#2f73c9}.filler{background:#c8d4df}.sheath{background:#4c5661}.shield{background:repeating-linear-gradient(45deg,#b9c4cf 0 4px,#e8edf1 4px 8px)}
+.wire-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px}.wire{background:#fff;border:1px solid var(--line);border-radius:16px;padding:15px;text-align:center;box-shadow:0 5px 14px rgba(23,50,77,.06)}.wire-bar{height:25px;border-radius:999px;margin:8px auto 12px;border:1px solid rgba(0,0,0,.15)}.wire strong{font-size:18px}.wire small{display:block;color:var(--muted);margin-top:5px}.brown{background:#7b4b2a}.black{background:#111}.grey{background:#8a8f98}.blue{background:#286cff}.yellow{background:#f1d300}.redwire{background:#cf2d2d}.pe{background:repeating-linear-gradient(90deg,#2e9f42 0 12px,#f1d300 12px 24px)}
+.code{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:18px 0}.code-part{min-width:72px;text-align:center;padding:13px 10px;border-radius:14px;background:#fff;border:2px solid var(--line);font-size:27px;font-weight:950;cursor:default}.code-part:nth-child(1){border-color:#12a39a}.code-part:nth-child(2){border-color:#ef7d27}.code-part:nth-child(3),.code-part:nth-child(4){border-color:#347fc2}.code-part:nth-child(5){border-color:#8c64bd}.decoder{display:grid;gap:10px}.decoder-row{display:grid;grid-template-columns:90px 1fr;gap:12px;align-items:center;background:#f7fafc;border:1px solid var(--line);border-radius:13px;padding:12px}.decoder-row b{font-size:22px;text-align:center;color:var(--blue)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px}table{border-collapse:collapse;width:100%;min-width:750px;background:#fff}th,td{padding:13px 14px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}th{background:#edf5fb}tbody tr:last-child td{border-bottom:0}tbody tr:hover td{background:#fbfdff}.old{color:var(--muted);font-size:14px}
+.type-card{position:relative;overflow:hidden}.type-card .voltage{position:absolute;right:14px;top:14px;font-size:13px;font-weight:900;background:var(--orange2);color:#a84e0b;padding:5px 9px;border-radius:999px}.type-card code{display:inline-block;font-size:20px;font-weight:950;color:var(--blue);background:#edf6fd;padding:6px 10px;border-radius:10px;margin-bottom:10px}.type-card p{margin:5px 0}.type-card .use{border-top:1px dashed var(--line);margin-top:12px;padding-top:12px;color:var(--ink)}
+.tool label{display:block;font-weight:850;font-size:14px}.tool input,.tool select,.question input,.question select{width:100%;border:1px solid #bfcfdd;border-radius:11px;background:#fff;padding:11px 12px;margin-top:6px;color:var(--ink);outline:none}.tool input:focus,.tool select:focus,.question input:focus,.question select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(29,111,174,.12)}.result{margin-top:14px;background:var(--blue2);border-left:5px solid var(--blue);border-radius:12px;padding:13px 15px;font-weight:850;line-height:1.45}
+.quiz-section{margin-bottom:20px}.quiz-section h3{display:flex;align-items:center;gap:10px;font-size:24px}.quiz-section h3 span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-size:16px}.q-list{display:grid;gap:12px}.question{padding:15px;transition:.2s}.question.correct{border-color:#55b995;background:var(--green2)}.question.wrong{border-color:#e18a8a;background:var(--red2)}.q-title{font-weight:850;line-height:1.45;margin-bottom:10px}.choices{display:grid;gap:8px}.choices label{display:flex;align-items:flex-start;gap:9px;background:#f7fafc;border:1px solid #e1e9f0;border-radius:10px;padding:10px;font-weight:650;cursor:pointer}.choices input{width:auto;margin:3px 0 0}.feedback{font-size:14px;font-weight:800;margin-top:8px;min-height:20px}.feedback.ok{color:var(--green)}.feedback.no{color:var(--red)}
+.quiz-footer{position:sticky;bottom:9px;z-index:30;display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:17px;padding:12px 14px;box-shadow:var(--shadow)}.score{font-weight:950;font-size:18px}.score strong{color:var(--blue)}.progress{height:10px;background:#e8eef4;border-radius:99px;overflow:hidden;min-width:180px;flex:1;max-width:420px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--teal));transition:.35s}.footer-note{text-align:center;color:var(--muted);font-size:13px;padding:20px 0 8px}
+@media(max-width:980px){.grid.two,.grid.three,.grid.four,.cross-section{grid-template-columns:1fr}.objectives{grid-template-columns:1fr}.wire-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.author{display:none}}
+@media(max-width:620px){.app{padding:9px}.topbar{top:5px}.logo{width:42px;height:42px}.nav{overflow:auto;flex-wrap:nowrap}.nav button{white-space:nowrap}.hero{padding:25px 18px}.wire-grid{grid-template-columns:1fr}.decoder-row{grid-template-columns:65px 1fr}.quiz-footer{flex-wrap:wrap}.progress{order:3;width:100%;max-width:none}}
+@media print{body{background:#fff}.topbar,.nav,.actions,.quiz-footer{display:none!important}.panel{display:block!important;break-before:page}.panel:first-of-type{break-before:auto}.card,.tool,.question{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="logo">Cu</div><div><h1>Ηλεκτρικές Εγκαταστάσεις — Κεφάλαια 2.1 & 2.2</h1><small>Αγωγοί και καλώδια εσωτερικών εγκαταστάσεων</small></div></div>
+  <div class="author">Ε. Κοκκώδης</div>
+</header>
+<nav class="nav" aria-label="Πλοήγηση">
+  <button class="active" data-page="start">Έναρξη</button>
+  <button data-page="basics">Αγωγός ή καλώδιο;</button>
+  <button data-page="construction">Κατασκευή</button>
+  <button data-page="colors">Χρώματα</button>
+  <button data-page="codes">Ονοματολογία</button>
+  <button data-page="types">Τύποι & χρήσεις</button>
+  <button data-page="practice">Εξάσκηση</button>
+</nav>
+<main>
+<section id="start" class="panel active">
+  <div class="hero">
+    <div class="eyebrow">Β΄ ΕΠΑ.Λ. • Παρουσίαση και εξάσκηση</div>
+    <h2>Από τον χάλκινο κλώνο στο κατάλληλο καλώδιο.</h2>
+    <p>Θα ξεχωρίσουμε τον αγωγό από το καλώδιο, θα αναγνωρίσουμε μονόκλωνους, πολύκλωνους και λεπτοπολύκλωνους αγωγούς, θα διαβάσουμε τα χρώματα και την ονοματολογία και θα επιλέξουμε τον κατάλληλο τύπο καλωδίου για κάθε εφαρμογή.</p>
+    <div class="actions"><button class="btn orange" data-go="basics">Έναρξη παρουσίασης</button><button class="btn secondary" data-go="practice">Κατευθείαν στην εξάσκηση</button></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Τι θεωρήθηκε πιο σημαντικό</h3><ul class="objectives"><li>Ορισμός και διαφορά αγωγού - καλωδίου.</li><li>Μονόκλωνος, πολύκλωνος και λεπτοπολύκλωνος αγωγός.</li><li>Χαλκός, μόνωση, μανδύας, θωράκιση και διατομή.</li><li>Σύγχρονα χρώματα L₁, L₂, L₃, N και PE, καθώς και παλαιότεροι χρωματισμοί που μπορεί να συναντηθούν.</li><li>Αποκωδικοποίηση του τύπου H05VV-F.</li><li>Κύριοι τύποι καλωδίων και σωστή χρήση τους.</li></ul></div>
+</section>
+
+<section id="basics" class="panel">
+  <div class="section-head"><div class="eyebrow">Μέρος 1</div><h2>Αγωγός ή καλώδιο;</h2><p>Οι δύο έννοιες συνδέονται, αλλά δεν είναι ίδιες.</p></div>
+  <div class="grid two">
+    <article class="card compare-card"><span class="tag">ΑΓΩΓΟΣ</span>
+      <svg viewBox="0 0 520 130" aria-hidden="true"><line x1="35" y1="65" x2="485" y2="65" stroke="#bd6a32" stroke-width="24" stroke-linecap="round"/><line x1="35" y1="65" x2="485" y2="65" stroke="#2470bd" stroke-width="42" stroke-linecap="round" opacity=".18"/></svg>
+      <strong>Μεταφέρει ηλεκτρικό ρεύμα ή ηλεκτρικά σήματα.</strong><p>Μπορεί να είναι γυμνός ή μονωμένος. Το βασικό του χαρακτηριστικό είναι η αγώγιμη διατομή σε mm².</p>
+    </article>
+    <article class="card compare-card"><span class="tag">ΚΑΛΩΔΙΟ</span>
+      <svg viewBox="0 0 520 130" aria-hidden="true"><rect x="35" y="24" width="450" height="82" rx="41" fill="#4c5661"/><circle cx="160" cy="65" r="25" fill="#286cff"/><circle cx="260" cy="65" r="25" fill="#7b4b2a"/><circle cx="360" cy="65" r="25" fill="url(#peGrad)"/><defs><linearGradient id="peGrad"><stop offset="0" stop-color="#2e9f42"/><stop offset=".5" stop-color="#f1d300"/><stop offset="1" stop-color="#2e9f42"/></linearGradient></defs><circle cx="160" cy="65" r="10" fill="#bd6a32"/><circle cx="260" cy="65" r="10" fill="#bd6a32"/><circle cx="360" cy="65" r="10" fill="#bd6a32"/></svg>
+      <strong>Ένας ή περισσότεροι μονωμένοι αγωγοί μέσα στο ίδιο περίβλημα.</strong><p>Το περίβλημα - μανδύας προσφέρει πρόσθετη ηλεκτρική και μηχανική προστασία.</p>
+    </article>
+  </div>
+  <div class="note"><strong>Κλειδί:</strong> Κάθε καλώδιο περιέχει αγωγό ή αγωγούς, αλλά ένας μεμονωμένος μονωμένος αγωγός χωρίς κοινό μανδύα δεν είναι πολυπολικό καλώδιο.</div>
+  <div class="grid two">
+    <div class="card"><h3>Υλικό αγωγού</h3><p>Στις εσωτερικές εγκαταστάσεις χρησιμοποιείται κυρίως <strong>χαλκός</strong>, επειδή συνδυάζει καλή αγωγιμότητα και κατάλληλη μηχανική συμπεριφορά. Σε ειδικές εφαρμογές συναντάται και αλουμίνιο.</p></div>
+    <div class="card"><h3>Υλικό μόνωσης</h3><p>Συνηθισμένα υλικά είναι το <strong>PVC</strong>, το πολυαιθυλένιο και το ελαστικό. Για υψηλές θερμοκρασίες χρησιμοποιούνται ειδικά υλικά, όπως σιλικόνη.</p></div>
+  </div>
+</section>
+
+<section id="construction" class="panel">
+  <div class="section-head"><div class="eyebrow">Μέρος 2</div><h2>Κατασκευή αγωγών και καλωδίων</h2><p>Ο αριθμός και το πάχος των κλώνων επηρεάζουν κυρίως την ευκαμψία.</p></div>
+  <div class="grid three">
+    <article class="card compare-card"><span class="tag">ΜΟΝΟΚΛΩΝΟΣ</span><svg viewBox="0 0 300 130"><circle cx="150" cy="65" r="45" fill="#bd6a32"/><circle cx="150" cy="65" r="58" fill="none" stroke="#2470bd" stroke-width="16" opacity=".45"/></svg><strong>Ένα συμπαγές σύρμα</strong><p>Δύσκαμπτος και κατάλληλος για σταθερές εγκαταστάσεις.</p></article>
+    <article class="card compare-card"><span class="tag">ΠΟΛΥΚΛΩΝΟΣ</span><svg viewBox="0 0 300 130"><g fill="#bd6a32"><circle cx="150" cy="65" r="16"/><circle cx="118" cy="65" r="16"/><circle cx="182" cy="65" r="16"/><circle cx="134" cy="37" r="16"/><circle cx="166" cy="37" r="16"/><circle cx="134" cy="93" r="16"/><circle cx="166" cy="93" r="16"/></g><circle cx="150" cy="65" r="62" fill="none" stroke="#2470bd" stroke-width="12" opacity=".45"/></svg><strong>Πολλά στριμμένα σύρματα</strong><p>Παρουσιάζει μεγαλύτερη ευκαμψία από τον μονόκλωνο.</p></article>
+    <article class="card compare-card"><span class="tag">ΛΕΠΤΟΠΟΛΥΚΛΩΝΟΣ</span><svg viewBox="0 0 300 130"><g fill="#bd6a32" id="fineStrands"></g><circle cx="150" cy="65" r="62" fill="none" stroke="#2470bd" stroke-width="12" opacity=".45"/></svg><strong>Πολλά πολύ λεπτά συρματίδια</strong><p>Είναι ο πιο εύκαμπτος και χρησιμοποιείται σε κινητές συνδέσεις και εύκαμπτα καλώδια.</p></article>
+  </div>
+  <div class="note good-note"><strong>Κανόνας:</strong> Για την ίδια συνολική διατομή, όσο περισσότεροι και λεπτότεροι είναι οι κλώνοι, τόσο μεγαλύτερη είναι η ευκαμψία.</div>
+  <div class="cross-section card">
+    <svg viewBox="0 0 420 360" aria-label="Τομή πολυπολικού καλωδίου"><circle cx="210" cy="180" r="145" fill="#4c5661"/><circle cx="210" cy="180" r="119" fill="#c8d4df"/><circle cx="145" cy="145" r="48" fill="#7b4b2a"/><circle cx="275" cy="145" r="48" fill="#286cff"/><circle cx="210" cy="245" r="48" fill="url(#pe2)"/><defs><linearGradient id="pe2"><stop offset="0" stop-color="#2e9f42"/><stop offset=".5" stop-color="#f1d300"/><stop offset="1" stop-color="#2e9f42"/></linearGradient></defs><circle cx="145" cy="145" r="20" fill="#bd6a32"/><circle cx="275" cy="145" r="20" fill="#bd6a32"/><circle cx="210" cy="245" r="20" fill="#bd6a32"/></svg>
+    <div><h3>Βασικά στρώματα καλωδίου</h3><div class="layer-list"><div class="layer"><span class="dot copper"></span><div><strong>Αγωγός</strong><br><small>Το μεταλλικό αγώγιμο μέρος.</small></div></div><div class="layer"><span class="dot insulation"></span><div><strong>Μόνωση αγωγού</strong><br><small>Απομονώνει ηλεκτρικά κάθε αγωγό.</small></div></div><div class="layer"><span class="dot filler"></span><div><strong>Εσωτερική επένδυση / πλήρωση</strong><br><small>Σταθεροποιεί και προστατεύει τους αγωγούς.</small></div></div><div class="layer"><span class="dot sheath"></span><div><strong>Εξωτερικός μανδύας</strong><br><small>Προστατεύει ολόκληρο το καλώδιο.</small></div></div><div class="layer"><span class="dot shield"></span><div><strong>Θωράκιση, όταν απαιτείται</strong><br><small>Περιορίζει ηλεκτρομαγνητικές παρεμβολές ή εξομαλύνει το ηλεκτρικό πεδίο.</small></div></div></div></div>
+  </div>
+  <div class="grid two" style="margin-top:18px"><div class="tool"><h3>Διάβασε τη γραφή μιας διατομής</h3><label>Παράδειγμα<input id="sizeInput" value="3 x 2,5" placeholder="π.χ. 3 x 2,5"></label><button class="btn" id="sizeBtn" style="margin-top:13px">Ερμηνεία</button><div class="result" id="sizeResult">3 αγωγοί, ο καθένας με διατομή 2,5 mm².</div></div><div class="card"><h3>Γιατί έχει σημασία η διατομή;</h3><p>Η διατομή εκφράζει το μέγεθος του αγώγιμου μέρους. Δεν πρέπει να συγχέεται με την εξωτερική διάμετρο του καλωδίου, η οποία περιλαμβάνει μόνωση και μανδύα.</p></div></div>
+</section>
+
+<section id="colors" class="panel">
+  <div class="section-head"><div class="eyebrow">Μέρος 3</div><h2>Χρώματα και διάκριση αγωγών</h2><p>Ο χρωματισμός βοηθά στην ασφαλή και γρήγορη αναγνώριση της λειτουργίας κάθε αγωγού.</p></div>
+  <div class="wire-grid">
+    <div class="wire"><div class="wire-bar brown"></div><strong>L₁</strong><small>Φάση 1 - καφέ</small></div>
+    <div class="wire"><div class="wire-bar black"></div><strong>L₂</strong><small>Φάση 2 - μαύρο</small></div>
+    <div class="wire"><div class="wire-bar grey"></div><strong>L₃</strong><small>Φάση 3 - γκρι</small></div>
+    <div class="wire"><div class="wire-bar blue"></div><strong>N</strong><small>Ουδέτερος - μπλε</small></div>
+    <div class="wire"><div class="wire-bar pe"></div><strong>PE</strong><small>Αγωγός προστασίας - κιτρινοπράσινο</small></div>
+  </div>
+  <div class="note"><strong>Μονοφασική παροχή:</strong> Ο αγωγός φάσης μπορεί να είναι καφέ, μαύρος ή γκρι. Ο ουδέτερος είναι μπλε και ο αγωγός προστασίας κιτρινοπράσινος.</div>
+  <div class="card">
+    <h3>Προσοχή στις παλιότερες εγκαταστάσεις</h3>
+    <p>Σε παλιότερες εγκαταστάσεις ή σε παλιούς τύπους καλωδίων μπορεί να συναντηθούν χρωματισμοί διαφορετικοί από τους σημερινούς:</p>
+    <div class="wire-grid" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px">
+      <div class="wire"><div class="wire-bar grey"></div><strong>Ουδέτερος</strong><small>Μπορεί να βρεθεί με γκρι χρώμα.</small></div>
+      <div class="wire"><div class="wire-bar yellow"></div><strong>Γείωση</strong><small>Μπορεί να βρεθεί μόνο με κίτρινο χρώμα.</small></div>
+      <div class="wire"><div class="wire-bar redwire"></div><strong>Φάση</strong><small>Σε ορισμένα παλιά καλώδια μπορεί να είναι κόκκινη.</small></div>
+    </div>
+    <div class="note" style="margin-top:14px"><strong>Βασικός κανόνας:</strong> Ο ηλεκτρολόγος δεν αναγνωρίζει έναν αγωγό μόνο από το χρώμα του. Πριν από κάθε εργασία επιβεβαιώνει τον ρόλο του με ασφαλείς ελέγχους και μετρήσεις.</div>
+  </div>
+</section>
+
+<section id="codes" class="panel">
+  <div class="section-head"><div class="eyebrow">Μέρος 4</div><h2>Πώς διαβάζεται η ονομασία ενός καλωδίου;</h2><p>Κάθε γράμμα ή αριθμός δίνει πληροφορία για πρότυπο, τάση, μόνωση, μανδύα και είδος αγωγού.</p></div>
+  <div class="card">
+    <h3 style="text-align:center">Παράδειγμα: H05VV-F</h3>
+    <div class="code"><div class="code-part">H</div><div class="code-part">05</div><div class="code-part">V</div><div class="code-part">V</div><div class="code-part">F</div></div>
+    <div class="decoder"><div class="decoder-row"><b>H</b><span>Καλώδιο σύμφωνα με εναρμονισμένο πρότυπο.</span></div><div class="decoder-row"><b>05</b><span>Ονομαστική τάση 300/500 V.</span></div><div class="decoder-row"><b>V</b><span>Μόνωση αγωγών από PVC.</span></div><div class="decoder-row"><b>V</b><span>Εξωτερικός μανδύας από PVC.</span></div><div class="decoder-row"><b>F</b><span>Εύκαμπτος αγωγός.</span></div></div>
+  </div>
+  <div class="note"><strong>Ονομαστική τάση:</strong> Η ένδειξη 300/500 V ή 450/750 V αποτελεί βασικό χαρακτηριστικό του καλωδίου και πρέπει να είναι κατάλληλη για το ηλεκτρικό σύστημα στο οποίο θα λειτουργήσει.</div>
+  <div class="grid two" style="margin-top:18px">
+    <div class="card"><h3>Αρχικό σύμβολο</h3><div class="keyline"><div class="n">H</div><div><strong>Εναρμονισμένος τύπος</strong><span>Κατασκευή σύμφωνα με εναρμονισμένα πρότυπα.</span></div></div><div class="keyline"><div class="n">A</div><div><strong>Αναγνωρισμένος εθνικός τύπος</strong><span>Εθνική τυποποίηση που αναγνωρίζεται στο σύστημα ονομασίας.</span></div></div><div class="keyline"><div class="n">J</div><div><strong>Τύπος σύμφωνα με πρότυπα IEC</strong><span>Συναντάται σε τύπους όπως J1VV.</span></div></div></div>
+    <div class="card"><h3>Συχνά τελικά σύμβολα αγωγού</h3><div class="keyline"><div class="n">U</div><div><strong>Μονόκλωνος δύσκαμπτος</strong><span>Στρογγυλός συμπαγής αγωγός.</span></div></div><div class="keyline"><div class="n">R</div><div><strong>Πολύκλωνος δύσκαμπτος</strong><span>Στρογγυλός πολύκλωνος αγωγός.</span></div></div><div class="keyline"><div class="n">F</div><div><strong>Εύκαμπτος</strong><span>Λεπτοπολύκλωνος αγωγός για κινητές συνδέσεις.</span></div></div><div class="keyline"><div class="n">K</div><div><strong>Εύκαμπτος για μόνιμη τοποθέτηση</strong><span>Συχνός σε μονοπολικούς αγωγούς πινάκων.</span></div></div></div>
+  </div>
+  <div class="card" style="margin-top:18px"><h3>Νέα και παλαιά ονομασία - χρήσιμη αντιστοιχία</h3><div class="table-wrap"><table><thead><tr><th>Σύγχρονος τύπος</th><th>Παλαιά ονομασία</th><th>Κύριο χαρακτηριστικό</th></tr></thead><tbody><tr><td><strong>H07V-K</strong></td><td class="old">NYAF</td><td>Μονοπολικός, εύκαμπτος, PVC, 450/750 V</td></tr><tr><td><strong>H07V-U</strong></td><td class="old">NYA(re)</td><td>Μονοπολικός, μονόκλωνος, PVC, 450/750 V</td></tr><tr><td><strong>H07V-R</strong></td><td class="old">NYA(rm)</td><td>Μονοπολικός, πολύκλωνος, PVC, 450/750 V</td></tr><tr><td><strong>A05VV-U / R</strong></td><td class="old">NYM(re) / NYM(rm)</td><td>Πολυπολικό καλώδιο σταθερής εγκατάστασης με μανδύα PVC</td></tr><tr><td><strong>H05VV-F</strong></td><td class="old">NYMHY</td><td>Εύκαμπτο καλώδιο με μόνωση και μανδύα PVC</td></tr><tr><td><strong>J1VV-U / R / S</strong></td><td class="old">NYY(re) / NYY(rm) / NYY(sm)</td><td>Καλώδιο 600/1000 V για σταθερές και βιομηχανικές εφαρμογές</td></tr></tbody></table></div></div>
+</section>
+
+<section id="types" class="panel">
+  <div class="section-head"><div class="eyebrow">Μέρος 5</div><h2>Κύριοι τύποι και χρήσεις</h2><p>Η σωστή επιλογή εξαρτάται από τη θέση, την ευκαμψία, τη θερμοκρασία, τη μηχανική καταπόνηση και την ονομαστική τάση.</p></div>
+  <div class="grid three">
+    <article class="card type-card"><span class="voltage">450/750 V</span><code>H07V-U / R / K</code><p>Μονοπολικοί αγωγοί με μόνωση PVC χωρίς κοινό μανδύα.</p><p class="use"><strong>Χρήση:</strong> μέσα σε σωλήνες, πίνακες ή άλλους προστατευμένους κλειστούς χώρους.</p></article>
+    <article class="card type-card"><span class="voltage">300/500 V</span><code>A05VV-U / R</code><p>Πολυπολικά καλώδια με μόνωση PVC, εσωτερική επένδυση και μανδύα PVC.</p><p class="use"><strong>Χρήση:</strong> σταθερές εγκαταστάσεις σε ξηρούς ή υγρούς χώρους.</p></article>
+    <article class="card type-card"><span class="voltage">300/500 V</span><code>H05VV-F</code><p>Εύκαμπτο πολυπολικό καλώδιο με μόνωση και μανδύα PVC.</p><p class="use"><strong>Χρήση:</strong> τροφοδότηση συσκευών και κινητές συνδέσεις με ήπιες καταπονήσεις.</p></article>
+    <article class="card type-card"><span class="voltage">300/300 V</span><code>H03VV-F</code><p>Ελαφρύ εύκαμπτο καλώδιο με μανδύα PVC.</p><p class="use"><strong>Χρήση:</strong> ελαφρές φορητές συσκευές σε κατοικίες και γραφεία.</p></article>
+    <article class="card type-card"><span class="voltage">300/300 V</span><code>H03VH-H</code><p>Πλακέ εύκαμπτο καλώδιο χωρίς κοινό μανδύα, με πόλους που μπορούν να αποχωριστούν.</p><p class="use"><strong>Χρήση:</strong> πολύ ελαφρές φορητές συσκευές και μικρές μηχανικές καταπονήσεις.</p></article>
+    <article class="card type-card"><span class="voltage">έως 180°C</span><code>H05SJ-K</code><p>Εύκαμπτος επικασσιτερωμένος αγωγός με μόνωση ελαστικού - σιλικόνης.</p><p class="use"><strong>Χρήση:</strong> σημεία με υψηλή θερμοκρασία.</p></article>
+    <article class="card type-card"><span class="voltage">300/500 V</span><code>H05RR-F</code><p>Εύκαμπτο καλώδιο με μόνωση και μανδύα ελαστικού.</p><p class="use"><strong>Χρήση:</strong> συσκευές και εφαρμογές με μικρές μηχανικές καταπονήσεις.</p></article>
+    <article class="card type-card"><span class="voltage">600/1000 V</span><code>J1VV-U / R / S</code><p>Ισχυρό καλώδιο PVC για εσωτερικούς χώρους, σωλήνες στο ύπαιθρο και βιομηχανικές εγκαταστάσεις.</p><p class="use"><strong>Προϋπόθεση:</strong> να μην υπόκειται σε μηχανικές καταπονήσεις χωρίς πρόσθετη προστασία.</p></article>
+    <article class="card type-card"><span class="voltage">ειδική χρήση</span><code>Θωρακισμένο</code><p>Περιλαμβάνει μεταλλικό πλέγμα, ταινία ή συρματίδια θωράκισης.</p><p class="use"><strong>Χρήση:</strong> σήματα, δεδομένα ή εφαρμογές όπου απαιτείται έλεγχος του ηλεκτρικού πεδίου.</p></article>
+  </div>
+  <div class="actions"><button class="btn orange" data-go="practice">Πάμε στην εξάσκηση →</button></div>
+</section>
+
+<section id="practice" class="panel">
+  <div class="section-head"><div class="eyebrow">Εξάσκηση</div><h2>Έλεγξε τι κατάλαβες</h2><p>27 ερωτήσεις με ορισμούς, σύγχρονους και παλαιότερους χρωματισμούς, αποκωδικοποίηση και πρακτική επιλογή καλωδίου.</p></div>
+  <div class="quiz-section card"><h3><span>Α</span> Βασικές έννοιες</h3><div class="q-list" id="partA"></div></div>
+  <div class="quiz-section card"><h3><span>Β</span> Χρώματα αγωγών</h3><div class="q-list" id="partB"></div></div>
+  <div class="quiz-section card"><h3><span>Γ</span> Αποκωδικοποίηση ονομασίας</h3><div class="q-list" id="partC"></div></div>
+  <div class="quiz-section card"><h3><span>Δ</span> Επιλογή τύπου και εφαρμογές</h3><div class="q-list" id="partD"></div></div>
+  <div class="quiz-footer"><div class="score">Βαθμολογία: <strong id="scoreText">— / 27</strong></div><div class="progress"><span id="scoreBar"></span></div><div style="display:flex;gap:8px"><button class="btn secondary" id="resetQuiz">Νέα προσπάθεια</button><button class="btn orange" id="checkQuiz">Έλεγχος απαντήσεων</button></div></div>
+</section>
+</main>
+<div class="footer-note">Εκπαιδευτικό υλικό παρουσίασης και εξάσκησης • Κεφάλαια 2.1 και 2.2</div>
+</div>
+<script>
+(()=>{'use strict';
+const panels=[...document.querySelectorAll('.panel')],nav=[...document.querySelectorAll('.nav button')];
+function show(id){panels.forEach(p=>p.classList.toggle('active',p.id===id));nav.forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'})}
+nav.forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+// fine-stranded drawing
+const g=document.getElementById('fineStrands');for(let row=-3;row<=3;row++){for(let col=-4;col<=4;col++){const x=150+col*13+(row%2?6.5:0),y=65+row*13;if((x-150)**2+(y-65)**2<48**2){const c=document.createElementNS('http://www.w3.org/2000/svg','circle');c.setAttribute('cx',x);c.setAttribute('cy',y);c.setAttribute('r','5');g.appendChild(c)}}}
+// section interpreter
+function parseSize(){const raw=document.getElementById('sizeInput').value.trim().replace(/,/g,'.');const m=raw.match(/^(\d+)\s*[x×]\s*(\d+(?:\.\d+)?)$/i);document.getElementById('sizeResult').textContent=m?`${m[1]} αγωγοί, ο καθένας με διατομή ${String(m[2]).replace('.',',')} mm².`:'Γράψε τη μορφή n x S, π.χ. 3 x 2,5.'}
+document.getElementById('sizeBtn').addEventListener('click',parseSize);document.getElementById('sizeInput').addEventListener('change',parseSize);
+const A=[
+ {q:'Ποια πρόταση ορίζει σωστά το καλώδιο;',o:['Ένα μόνο γυμνό σύρμα','Ένας ή περισσότεροι μονωμένοι αγωγοί μέσα στο ίδιο περίβλημα','Μόνο η εξωτερική μόνωση','Οποιοδήποτε μεταλλικό αντικείμενο'],a:1},
+ {q:'Ποιος αγωγός είναι συνήθως ο πιο εύκαμπτος;',o:['Μονόκλωνος','Πολύκλωνος','Λεπτοπολύκλωνος','Όλοι το ίδιο'],a:2},
+ {q:'Ποιο είναι το κυριότερο υλικό αγωγών εσωτερικών εγκαταστάσεων;',o:['Ξύλο','Χαλκός','Γυαλί','PVC'],a:1},
+ {q:'Το 3 x 2,5 σε ένα καλώδιο σημαίνει:',o:['3 καλώδια μήκους 2,5 m','3 αγωγοί διατομής 2,5 mm² ο καθένας','Διάμετρο 3 mm και μήκος 2,5 m','Τάση 3 x 2,5 V'],a:1},
+ {q:'Ποιο μέρος προστατεύει συνολικά το πολυπολικό καλώδιο εξωτερικά;',o:['Ο κλώνος','Ο μανδύας','Η διατομή','Το ρεύμα'],a:1},
+ {q:'Η θωράκιση ενός καλωδίου χρησιμοποιείται κυρίως για:',o:['Να αλλάζει το χρώμα του','Προστασία σημάτων από παρεμβολές ή έλεγχο του ηλεκτρικού πεδίου','Να μειώνει τον αριθμό αγωγών','Να αυξάνει τη συχνότητα'],a:1}
+];
+const B=[
+ {q:'Χρώμα αγωγού L₁ σε τριφασική εγκατάσταση:',o:['Καφέ','Μπλε','Κιτρινοπράσινο','Λευκό'],a:0},
+ {q:'Χρώμα αγωγού L₂:',o:['Γκρι','Μαύρο','Μπλε','Κίτρινο'],a:1},
+ {q:'Χρώμα αγωγού L₃:',o:['Καφέ','Μαύρο','Γκρι','Πράσινο'],a:2},
+ {q:'Χρώμα ουδέτερου N:',o:['Μπλε','Καφέ','Μαύρο','Κιτρινοπράσινο'],a:0},
+ {q:'Χρώμα αγωγού προστασίας PE:',o:['Μόνο πράσινο','Μόνο κίτρινο','Κιτρινοπράσινο','Μπλε'],a:2},
+ {q:'Σε μονοφασική παροχή, ο αγωγός φάσης μπορεί να είναι:',o:['Μόνο καφέ','Καφέ, μαύρος ή γκρι','Μόνο μπλε','Κιτρινοπράσινος'],a:1},
+ {q:'Σε παλιότερη εγκατάσταση, ποιο χρώμα μπορεί να έχει ο ουδέτερος;',o:['Γκρι','Κόκκινο','Κιτρινοπράσινο','Καφέ'],a:0},
+ {q:'Σε παλιότερη εγκατάσταση, ο αγωγός γείωσης μπορεί να βρεθεί:',o:['Μόνο με κίτρινο χρώμα','Με μπλε χρώμα','Με κόκκινο χρώμα','Με μαύρο χρώμα'],a:0},
+ {q:'Σε ορισμένα παλιά καλώδια, το κόκκινο χρώμα μπορεί να αντιστοιχεί σε:',o:['Ουδέτερο','Φάση','Γείωση','Μανδύα'],a:1}
+];
+const C=[
+ {q:'Στον τύπο H05VV-F, το H δηλώνει:',o:['Χαλκό','Εναρμονισμένο πρότυπο','Υψηλή θερμοκρασία','Χωρίς μανδύα'],a:1},
+ {q:'Στον τύπο H05VV-F, το 05 δηλώνει:',o:['50 αγωγούς','300/500 V','500 mm²','5 kV'],a:1},
+ {q:'Το πρώτο V στον τύπο H05VV-F δηλώνει:',o:['Μόνωση αγωγών από PVC','Μανδύα από ελαστικό','Πολύκλωνο αγωγό','Θωράκιση'],a:0},
+ {q:'Το δεύτερο V στον τύπο H05VV-F δηλώνει:',o:['Μανδύα από PVC','Μόνωση σιλικόνης','Μονόκλωνο αγωγό','Ονομαστική τάση'],a:0},
+ {q:'Το F στο τέλος δηλώνει:',o:['Δύσκαμπτο μονόκλωνο','Εύκαμπτο αγωγό','Αγωγό γείωσης','Πλακέ καλώδιο'],a:1},
+ {q:'Ποια αντιστοιχία είναι σωστή;',o:['H07V-K ↔ NYAF','H05VV-F ↔ NYA(re)','A05VV-U ↔ NYAF','J1VV-R ↔ NYLHY'],a:0}
+];
+const D=[
+ {q:'Για μονοπολικούς αγωγούς μέσα σε σωλήνες ή σε πίνακα, ποια οικογένεια είναι κατάλληλη;',o:['H07V-U/R/K','H03VH-H','H05SJ-K μόνο','H03VV-F'],a:0},
+ {q:'Για σταθερή εγκατάσταση σε ξηρό ή υγρό χώρο με κοινό μανδύα PVC:',o:['A05VV-U/R','H03VH-H','H07V-U χωρίς σωλήνα','H05SJ-K'],a:0},
+ {q:'Για εύκαμπτη τροφοδότηση συσκευής με μόνωση και μανδύα PVC:',o:['H05VV-F','H07V-U','J1VV-S','A05VV-U'],a:0},
+ {q:'Για πολύ ελαφριά φορητή συσκευή και μικρή μηχανική καταπόνηση:',o:['H03VV-F ή H03VH-H','J1VV-S μόνο','H07V-R χωρίς προστασία','A05VV-R μόνο'],a:0},
+ {q:'Για σημείο με υψηλή θερμοκρασία, ποιος τύπος ταιριάζει καλύτερα;',o:['H05SJ-K','H03VV-F','H07V-U','A05VV-U'],a:0},
+ {q:'Ποιος τύπος έχει ονομαστική τάση 600/1000 V και χρησιμοποιείται και σε βιομηχανικές εγκαταστάσεις;',o:['J1VV-U/R/S','H03VH-H','H05V-U','H03VV-F'],a:0}
+];
+function renderPart(id,data,prefix){const el=document.getElementById(id);el.innerHTML='';data.forEach((q,i)=>{const d=document.createElement('div');d.className='question';d.dataset.group=prefix;d.dataset.index=i;d.innerHTML=`<div class="q-title">${i+1}. ${q.q}</div><div class="choices">${q.o.map((x,j)=>`<label><input type="radio" name="${prefix}_${i}" value="${j}"><span>${x}</span></label>`).join('')}</div><div class="feedback"></div>`;el.appendChild(d)})}
+renderPart('partA',A,'A');renderPart('partB',B,'B');renderPart('partC',C,'C');renderPart('partD',D,'D');
+const sets={A,B,C,D};
+function check(){let score=0,total=0;document.querySelectorAll('.question').forEach(qel=>{const data=sets[qel.dataset.group][Number(qel.dataset.index)],sel=qel.querySelector('input:checked'),fb=qel.querySelector('.feedback');total++;qel.classList.remove('correct','wrong');fb.className='feedback';if(sel&&Number(sel.value)===data.a){score++;qel.classList.add('correct');fb.classList.add('ok');fb.textContent='Σωστά.'}else{qel.classList.add('wrong');fb.classList.add('no');fb.textContent=`Σωστή απάντηση: ${data.o[data.a]}`}});document.getElementById('scoreText').textContent=`${score} / ${total}`;document.getElementById('scoreBar').style.width=`${score/total*100}%`;window.scrollTo({top:document.getElementById('practice').offsetTop,behavior:'smooth'})}
+function reset(){document.querySelectorAll('.question').forEach(q=>{q.classList.remove('correct','wrong');q.querySelectorAll('input').forEach(i=>i.checked=false);q.querySelector('.feedback').textContent=''});document.getElementById('scoreText').textContent='— / 27';document.getElementById('scoreBar').style.width='0%'}
+document.getElementById('checkQuiz').addEventListener('click',check);document.getElementById('resetQuiz').addEventListener('click',reset);
+})();
+</script>
+</body>
+</html>
