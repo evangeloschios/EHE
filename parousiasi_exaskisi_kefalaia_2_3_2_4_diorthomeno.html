@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Κεφάλαια 2.3–2.4 — Επιτρεπόμενη ένταση και μικρότερες διατομές</title>
+<style>
+:root{
+  --ink:#18354e;--muted:#587086;--teal:#0e8e83;--teal2:#e8f7f4;
+  --orange:#ef7d27;--orange2:#fff2e7;--red:#c64242;--red2:#fff1f1;
+  --green:#138a62;--green2:#eaf8f2;--blue:#2572b8;--blue2:#eaf4fd;
+  --paper:#fff;--bg:#f3f7fa;--line:#d5e1ea;--shadow:0 10px 28px rgba(22,55,79,.10);
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:linear-gradient(180deg,#f8fbfd,#eef5f7);color:var(--ink)}
+button,input,select{font:inherit}button{cursor:pointer}
+.app{max-width:1280px;margin:auto;padding:16px}
+.topbar{position:sticky;top:8px;z-index:40;background:rgba(255,255,255,.95);backdrop-filter:blur(10px);border:1px solid var(--line);border-radius:18px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px;box-shadow:var(--shadow);margin-bottom:16px}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}.logo{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;background:linear-gradient(135deg,var(--teal),#27b9ad);color:#fff;font-weight:950;font-size:21px}.brand h1{font-size:clamp(17px,2.2vw,25px);line-height:1.15;margin:0}.brand small{display:block;color:var(--muted);margin-top:4px}.author{font-weight:800;color:var(--muted);white-space:nowrap}
+.nav{display:flex;flex-wrap:wrap;gap:8px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:10px;margin-bottom:18px;box-shadow:0 5px 16px rgba(22,55,79,.07)}
+.nav button{border:0;background:#edf5f5;color:var(--ink);padding:10px 13px;border-radius:12px;font-weight:800}.nav button.active,.nav button:hover{background:var(--teal);color:#fff}
+.panel{display:none;animation:fade .25s ease}.panel.active{display:block}@keyframes fade{from{opacity:.2;transform:translateY(4px)}to{opacity:1;transform:none}}
+.hero,.card,.formula,.question,.tool{background:#fff;border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+.hero{padding:clamp(24px,5vw,55px);position:relative;overflow:hidden}.hero:after{content:"";position:absolute;width:230px;height:230px;border:36px solid rgba(14,142,131,.08);border-radius:50%;right:-85px;top:-80px}.eyebrow{color:var(--orange);font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:13px}.hero h2{font-size:clamp(34px,5vw,58px);line-height:1.04;margin:10px 0 16px}.hero p{font-size:18px;line-height:1.6;color:var(--muted);max-width:880px}.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}.btn{border:0;border-radius:13px;padding:12px 18px;font-weight:900;background:var(--teal);color:#fff;box-shadow:0 7px 16px rgba(14,142,131,.22)}.btn.orange{background:var(--orange)}.btn.secondary{background:#fff;color:var(--teal);border:2px solid var(--teal);box-shadow:none}
+.section-head{margin:6px 0 20px}.section-head h2{font-size:clamp(29px,4vw,47px);margin:5px 0 8px}.section-head p{font-size:18px;color:var(--muted);line-height:1.55;margin:0}
+.grid{display:grid;gap:18px}.grid.two{grid-template-columns:repeat(2,minmax(0,1fr))}.grid.three{grid-template-columns:repeat(3,minmax(0,1fr))}.grid.four{grid-template-columns:repeat(4,minmax(0,1fr))}
+.card{padding:20px}.card h3{margin:0 0 11px;font-size:22px}.card p{color:var(--muted);line-height:1.58}.card ul{padding-left:20px}.card li{margin:8px 0;line-height:1.5}
+.objectives{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0;list-style:none}.objectives li{background:#fff;border:1px solid var(--line);border-left:5px solid var(--teal);border-radius:14px;padding:14px 16px;line-height:1.45}
+.factor{padding:18px;border-radius:18px;background:#fff;border:1px solid var(--line);box-shadow:0 6px 16px rgba(22,55,79,.06)}.factor strong{display:block;font-size:19px;margin:8px 0 5px}.factor span{color:var(--muted);line-height:1.5}.icon{font-size:32px}
+.formula{text-align:center;padding:22px}.formula .math{font-family:"Cambria Math","Times New Roman",serif;font-size:clamp(32px,5vw,50px);font-weight:800;color:var(--teal);margin:9px 0}.formula small{color:var(--muted);line-height:1.5}
+.note{border-left:5px solid #f3bc36;background:#fff9df;border-radius:14px;padding:14px 16px;line-height:1.55;margin:16px 0}.note.good{border-left-color:var(--green);background:var(--green2)}.note.danger{border-left-color:var(--red);background:var(--red2)}
+.table-wrap{overflow:auto;border:1px solid var(--line);border-radius:16px;background:#fff}table{border-collapse:collapse;width:100%;min-width:690px}th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:center}th{background:#dff3ef;font-size:14px}td:first-child,th:first-child{text-align:left}tbody tr:last-child td{border-bottom:0}tbody tr:hover td{background:#fafdfd}.caption{font-size:14px;color:var(--muted);margin:8px 0 0;line-height:1.45}
+.group-card{border-top:6px solid var(--teal)}.group-card:nth-child(2){border-top-color:var(--orange)}.group-card:nth-child(3){border-top-color:var(--blue)}
+.example{display:flex;gap:12px;align-items:flex-start;background:var(--orange2);border-radius:15px;padding:15px;margin:10px 0}.example .num{width:36px;height:36px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-weight:900}.example strong{display:block;margin-bottom:4px}.example span{color:var(--muted)}
+.heat-demo{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center}.heat-demo svg{width:100%;height:auto}.heat-list{display:grid;gap:10px}.heat-item{padding:12px 14px;background:#f8fbfc;border:1px solid var(--line);border-radius:13px}.heat-item strong{display:block}.heat-item span{color:var(--muted);font-size:14px}
+.tool{padding:20px}.tool label{display:block;font-weight:800;margin-top:10px}.tool input,.tool select{width:100%;padding:11px 12px;border:1px solid #bfcfda;border-radius:11px;margin-top:6px}.result{margin-top:14px;padding:14px 16px;background:var(--teal2);border-left:5px solid var(--teal);border-radius:12px;font-weight:900;min-height:50px}
+.min-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.min-card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:17px;box-shadow:0 6px 16px rgba(22,55,79,.06)}.min-card .size{font-size:30px;font-weight:950;color:var(--teal)}.min-card h4{margin:6px 0}.min-card p{margin:0;color:var(--muted);line-height:1.5}
+.quiz-part{margin-top:20px}.quiz-part h3{display:flex;align-items:center;gap:10px;font-size:25px}.quiz-part h3 span{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:var(--orange);color:#fff;font-size:17px}.q-list{display:grid;gap:12px}.question{padding:16px;box-shadow:0 5px 14px rgba(22,55,79,.06)}.question.correct{border-color:#65ba99;background:var(--green2)}.question.wrong{border-color:#e28b8b;background:var(--red2)}.q-title{font-weight:850;line-height:1.45;margin-bottom:10px}.choices{display:grid;gap:8px}.choices label{display:flex;gap:9px;align-items:flex-start;background:#f8fbfc;border:1px solid #e0e8ee;border-radius:11px;padding:10px;font-weight:600}.choices input{margin-top:3px}.question select,.question input[type="text"]{width:100%;max-width:560px;padding:11px 12px;border:1px solid #bdccd8;border-radius:11px}.feedback{font-size:14px;font-weight:800;margin-top:8px;min-height:20px}.feedback.ok{color:var(--green)}.feedback.no{color:var(--red)}
+.quiz-footer{position:sticky;bottom:8px;z-index:30;display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;background:rgba(255,255,255,.96);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:17px;padding:12px 14px;box-shadow:var(--shadow)}.score{font-size:18px;font-weight:900}.progress{height:10px;background:#e7eef2;border-radius:999px;overflow:hidden;flex:1;min-width:180px;max-width:420px}.progress span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--teal));transition:.3s}
+.footer-note{text-align:center;color:var(--muted);font-size:13px;padding:20px 0 8px}
+@media(max-width:960px){.grid.two,.grid.three,.grid.four,.min-grid,.heat-demo{grid-template-columns:1fr}.objectives{grid-template-columns:1fr}.author{display:none}}
+@media(max-width:620px){.app{padding:9px}.nav{overflow:auto;flex-wrap:nowrap}.nav button{white-space:nowrap}.hero{padding:24px 18px}.quiz-footer{align-items:stretch}.progress{order:3;max-width:none;width:100%}}
+@media print{body{background:#fff}.topbar,.nav,.hero-actions,.quiz-footer{display:none!important}.panel{display:block!important;break-before:page}.panel:first-of-type{break-before:auto}.card,.formula,.question,.tool{box-shadow:none;break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="topbar">
+  <div class="brand"><div class="logo">I²R</div><div><h1>Ηλεκτρικές Εγκαταστάσεις — Κεφάλαια 2.3 και 2.4</h1><small>Επιτρεπόμενη ένταση αγωγών και μικρότερες αποδεκτές διατομές</small></div></div>
+  <div class="author">Ε. Κοκκώδης</div>
+</header>
+<nav class="nav">
+  <button class="active" data-page="start">Έναρξη</button>
+  <button data-page="heat">Θέρμανση αγωγών</button>
+  <button data-page="tables">Ομάδες & πίνακες</button>
+  <button data-page="corrections">Συντελεστές διόρθωσης</button>
+  <button data-page="minimum">Ελάχιστες διατομές</button>
+  <button data-page="practice">Εξάσκηση</button>
+  <button data-page="recap">Ανακεφαλαίωση</button>
+</nav>
+<main>
+<section id="start" class="panel active">
+  <div class="hero">
+    <div class="eyebrow">Παρουσίαση και εξάσκηση</div>
+    <h2>Πόσο ρεύμα μπορεί να περάσει με ασφάλεια από έναν αγωγό;</h2>
+    <p>Η παρουσίαση ακολουθεί αποκλειστικά τα δεδομένα των κεφαλαίων 2.3 και 2.4 του σχολικού βιβλίου: θέρμανση αγωγών, επιτρεπόμενη ένταση, ομάδες εγκατάστασης, συντελεστές διόρθωσης και μικρότερες αποδεκτές διατομές.</p>
+    <div class="hero-actions"><button class="btn orange" data-go="heat">Έναρξη παρουσίασης</button><button class="btn secondary" data-go="practice">Κατευθείαν στην εξάσκηση</button></div>
+  </div>
+  <div class="card" style="margin-top:18px">
+    <h3>Στόχοι της ενότητας</h3>
+    <ul class="objectives">
+      <li>Να εξηγείς γιατί θερμαίνεται ένας αγωγός όταν διαρρέεται από ρεύμα.</li>
+      <li>Να αναφέρεις τους τρεις παράγοντες από τους οποίους εξαρτάται η επιτρεπόμενη ένταση.</li>
+      <li>Να διακρίνεις τις τρεις ομάδες αγωγών του Πίνακα 2.3α.</li>
+      <li>Να χρησιμοποιείς τους συντελεστές διόρθωσης θερμοκρασίας και αριθμού ενεργών αγωγών.</li>
+      <li>Να αναγνωρίζεις τις μικρότερες αποδεκτές διατομές του Πίνακα 2.4α.</li>
+      <li>Να επιλέγεις απαντήσεις και να εκτελείς απλούς υπολογισμούς με τα δεδομένα του βιβλίου.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="heat" class="panel">
+  <div class="section-head"><div class="eyebrow">Κεφάλαιο 2.3</div><h2>Θέρμανση και επιτρεπόμενη ένταση</h2><p>Για κάθε μονωμένο αγωγό υπάρχει ένα ανώτατο όριο έντασης που επιτρέπεται να τον διαρρέει συνεχώς.</p></div>
+  <div class="note danger"><strong>Αν ξεπεραστεί το όριο:</strong> φθείρονται οι μονώσεις, δημιουργούνται βραχυκυκλώματα και μπορεί να προκληθούν πυρκαγιές.</div>
+  <div class="grid three">
+    <div class="factor"><div class="icon">◯</div><strong>Διατομή αγωγού</strong><span>Όσο μικρότερη είναι η διατομή, τόσο μεγαλύτερη είναι η αντίσταση και η θερμοκρασία που αναπτύσσεται.</span></div>
+    <div class="factor"><div class="icon">▣</div><strong>Είδος μόνωσης</strong><span>Η αντοχή σε θερμοκρασία εξαρτάται από το υλικό της μόνωσης.</span></div>
+    <div class="factor"><div class="icon">⌂</div><strong>Συνθήκες τοποθέτησης και λειτουργίας</strong><span>Η θερμοκρασία χώρου, ο σωλήνας, ο αέρας και ο αριθμός ενεργών αγωγών επηρεάζουν την απαγωγή θερμότητας.</span></div>
+  </div>
+  <div class="grid two" style="margin-top:18px">
+    <div class="formula"><h3>Φαινόμενο Τζάουλ</h3><div class="math">Q = I² · R · t</div><small>Όσο αυξάνεται η ένταση I, αυξάνεται έντονα και η παραγόμενη θερμότητα.</small></div>
+    <div class="formula"><h3>Αντίσταση αγωγού</h3><div class="math">R = κ · ρ · ℓ / S</div><small>κ: συντελεστής πλέξης, ρ: ειδική αντίσταση, ℓ: μήκος, S: διατομή.</small></div>
+  </div>
+  <div class="heat-demo" style="margin-top:18px">
+    <div class="card">
+      <svg viewBox="0 0 560 250" aria-hidden="true">
+        <defs><linearGradient id="heatGrad" x1="0" x2="1"><stop offset="0" stop-color="#2ca35d"/><stop offset=".5" stop-color="#f2bc38"/><stop offset="1" stop-color="#df4d3e"/></linearGradient></defs>
+        <line x1="55" y1="80" x2="505" y2="80" stroke="url(#heatGrad)" stroke-width="18" stroke-linecap="round"/>
+        <line x1="55" y1="170" x2="505" y2="170" stroke="url(#heatGrad)" stroke-width="38" stroke-linecap="round"/>
+        <text x="55" y="47" font-size="18" font-weight="700" fill="#18354e">Μικρότερη διατομή</text>
+        <text x="55" y="137" font-size="18" font-weight="700" fill="#18354e">Μεγαλύτερη διατομή</text>
+        <text x="500" y="108" text-anchor="end" font-size="15" fill="#587086">υψηλότερη θερμοκρασία</text>
+        <text x="500" y="215" text-anchor="end" font-size="15" fill="#587086">χαμηλότερη θερμοκρασία</text>
+      </svg>
+    </div>
+    <div class="heat-list">
+      <div class="heat-item"><strong>Ελαστική μόνωση</strong><span>Αντέχει περίπου μέχρι 60°C.</span></div>
+      <div class="heat-item"><strong>Μόνωση PVC</strong><span>Αντέχει περίπου μέχρι 70°C.</span></div>
+      <div class="heat-item"><strong>Μόνωση σιλικόνης</strong><span>Για ειδικές χρήσεις: περίπου από −60°C έως 180°C.</span></div>
+      <div class="heat-item"><strong>Θερμά σημεία</strong><span>Αποφεύγεται η διέλευση καλωδίων από σημεία όπως οι καμινάδες.</span></div>
+    </div>
+  </div>
+  <div class="note"><strong>Ενεργοί αγωγοί:</strong> οι αγωγοί που διαρρέονται από ρεύμα, δηλαδή οι αγωγοί των φάσεων και ο ουδέτερος στα μονοφασικά και στα ασύμμετρα τριφασικά συστήματα.</div>
+</section>
+
+<section id="tables" class="panel">
+  <div class="section-head"><div class="eyebrow">Πίνακας 2.3α</div><h2>Ομάδες τοποθέτησης και επιτρεπόμενες εντάσεις</h2><p>Οι τιμές του πίνακα αφορούν χάλκινους μονωμένους αγωγούς, θερμοκρασία περιβάλλοντος 25°C και μέγιστη θερμοκρασία αγωγού 60°C.</p></div>
+  <div class="grid three">
+    <div class="card group-card"><h3>1η Ομάδα</h3><p>Τρεις το πολύ ενεργοί αγωγοί μέσα στον ίδιο σωλήνα ή στο ίδιο καλώδιο, σε ορατή ή χωνευτή εγκατάσταση.</p></div>
+    <div class="card group-card"><h3>2η Ομάδα</h3><p>Μονωμένοι αγωγοί σε ορατή εγκατάσταση, χωρίς σωλήνες, με απόσταση ίση ή μεγαλύτερη από τη διάμετρό τους.</p></div>
+    <div class="card group-card"><h3>3η Ομάδα</h3><p>Εύκαμπτα καλώδια τροφοδότησης κινητών ή φορητών συσκευών κατανάλωσης.</p></div>
+  </div>
+  <div class="table-wrap" style="margin-top:18px"><table>
+    <thead><tr><th>Διατομή (mm²)</th><th>1η Ομάδα (A)</th><th>2η Ομάδα (A)</th><th>3η Ομάδα (A)</th></tr></thead>
+    <tbody>
+      <tr><td>0,75</td><td>—</td><td>13</td><td>16</td></tr>
+      <tr><td>1</td><td>12</td><td>16</td><td>20</td></tr>
+      <tr><td>1,5</td><td>16</td><td>20</td><td>25</td></tr>
+      <tr><td>2,5</td><td>21</td><td>27</td><td>34</td></tr>
+      <tr><td>4</td><td>27</td><td>36</td><td>45</td></tr>
+      <tr><td>6</td><td>35</td><td>47</td><td>57</td></tr>
+      <tr><td>10</td><td>48</td><td>65</td><td>78</td></tr>
+      <tr><td>16</td><td>65</td><td>87</td><td>104</td></tr>
+      <tr><td>25</td><td>88</td><td>115</td><td>137</td></tr>
+      <tr><td>35</td><td>110</td><td>143</td><td>168</td></tr>
+      <tr><td>50</td><td>140</td><td>178</td><td>210</td></tr>
+    </tbody>
+  </table></div>
+  <p class="caption">Οι τιμές αναπαράγονται από τον Πίνακα 2.3α του βιβλίου.</p>
+  <div class="grid two" style="margin-top:18px">
+    <div class="card"><h3>Απαγωγή θερμότητας</h3><p>Η απαγωγή γίνεται δυσκολότερα όταν τα καλώδια βρίσκονται μέσα σε προστατευτικούς σωλήνες και ευκολότερα όταν βρίσκονται στον αέρα με επαρκή απόσταση.</p></div>
+    <div class="card"><h3>Καλώδιο μέσα στο έδαφος</h3><p>Το βιβλίο αναφέρει ότι η μέγιστη επιτρεπόμενη ένταση είναι αρκετά υψηλότερη, επειδή το καλοκαίρι στο έδαφος επικρατούν χαμηλότερες θερμοκρασίες σε σχέση με τον αέρα.</p></div>
+  </div>
+</section>
+
+<section id="corrections" class="panel">
+  <div class="section-head"><div class="eyebrow">Πίνακες 2.3β–2.3δ</div><h2>Συντελεστές διόρθωσης</h2><p>Όταν αυξάνεται η θερμοκρασία ή οι ενεργοί αγωγοί είναι περισσότεροι από τρεις, μειώνεται η επιτρεπόμενη ένταση.</p></div>
+  <div class="grid two">
+    <div class="card">
+      <h3>1η Ομάδα στους 30°C</h3>
+      <div class="table-wrap"><table style="min-width:430px"><thead><tr><th>Διατομή (mm²)</th><th>Ένταση (A)</th></tr></thead><tbody>
+        <tr><td>1</td><td>11</td></tr><tr><td>1,5</td><td>14</td></tr><tr><td>2,5</td><td>20</td></tr><tr><td>4</td><td>25</td></tr><tr><td>6</td><td>33</td></tr><tr><td>10</td><td>43</td></tr><tr><td>16</td><td>60</td></tr><tr><td>25</td><td>83</td></tr><tr><td>35</td><td>100</td></tr><tr><td>50</td><td>127</td></tr>
+      </tbody></table></div>
+    </div>
+    <div class="card">
+      <h3>Διόρθωση θερμοκρασίας</h3>
+      <div class="table-wrap"><table style="min-width:480px"><thead><tr><th>Θερμοκρασία (°C)</th><th>30</th><th>35</th><th>40</th><th>45</th><th>50</th><th>55</th></tr></thead><tbody><tr><td>Συντελεστής</td><td>1</td><td>0,91</td><td>0,82</td><td>0,71</td><td>0,58</td><td>0,41</td></tr></tbody></table></div>
+      <h3 style="margin-top:18px">Περισσότεροι από 3 ενεργοί αγωγοί</h3>
+      <div class="table-wrap"><table style="min-width:420px"><thead><tr><th>Αριθμός ενεργών αγωγών</th><th>4–6</th><th>7–9</th></tr></thead><tbody><tr><td>Συντελεστής</td><td>0,8</td><td>0,7</td></tr></tbody></table></div>
+    </div>
+  </div>
+  <div class="grid two" style="margin-top:18px">
+    <div class="card">
+      <h3>Παράδειγμα του βιβλίου</h3>
+      <div class="example"><div class="num">1</div><div><strong>10 mm², 1η Ομάδα, 50°C</strong><span>Από τον Πίνακα 2.3β: 43 A. Από τον Πίνακα 2.3γ: 0,58.</span></div></div>
+      <div class="formula"><div class="math" style="font-size:36px">Iμ = 43 × 0,58 = 24,94 A</div></div>
+    </div>
+    <div class="tool">
+      <h3>Υπολογιστής με τους πίνακες του βιβλίου</h3>
+      <label>Ένταση από τον βασικό πίνακα (A)<input id="baseCurrent" inputmode="decimal" value="43"></label>
+      <label>Συντελεστής θερμοκρασίας<select id="tempFactor"><option value="1">1 — 30°C</option><option value="0.91">0,91 — 35°C</option><option value="0.82">0,82 — 40°C</option><option value="0.71">0,71 — 45°C</option><option value="0.58" selected>0,58 — 50°C</option><option value="0.41">0,41 — 55°C</option></select></label>
+      <label>Συντελεστής ενεργών αγωγών<select id="conductorFactor"><option value="1">1 — έως 3 αγωγοί</option><option value="0.8">0,8 — 4 έως 6</option><option value="0.7">0,7 — 7 έως 9</option></select></label>
+      <button class="btn orange" id="calcCurrent" style="margin-top:14px">Υπολογισμός</button>
+      <div class="result" id="currentResult">43 × 0,58 × 1 = 24,94 A</div>
+    </div>
+  </div>
+  <div class="note"><strong>Όταν συνυπάρχουν και οι δύο συνθήκες:</strong> ο συντελεστής θερμοκρασίας και ο συντελεστής αριθμού ενεργών αγωγών πολλαπλασιάζονται.</div>
+  <div class="grid three">
+    <div class="card"><h3>Απαγόρευση 1</h3><p>Δεν επιτρέπεται να συνυπάρχουν στον ίδιο σωλήνα αγωγοί τάσης 230 V και αγωγοί τηλεφώνου.</p></div>
+    <div class="card"><h3>Απαγόρευση 2</h3><p>Δεν επιτρέπεται η τοποθέτηση άσχετων αγωγών στο φρεάτιο του ανελκυστήρα.</p></div>
+    <div class="card"><h3>Σωληνώσεις</h3><p>Οι σωλήνες ηλεκτρικού τοποθετούνται πάνω από σωλήνες ζεστού νερού. Σε θερμαινόμενους χώρους η οριζόντια πορεία έχει κλίση 2%.</p></div>
+  </div>
+</section>
+
+<section id="minimum" class="panel">
+  <div class="section-head"><div class="eyebrow">Κεφάλαιο 2.4</div><h2>Οι μικρότερες αποδεκτές διατομές</h2><p>Ανεξάρτητα από το προβλεπόμενο φορτίο, το βιβλίο προβλέπει κατά περίπτωση ορισμένες ελάχιστες διατομές αγωγών.</p></div>
+  <div class="min-grid">
+    <div class="min-card"><div class="size">0,5 mm²</div><h4>Τάση ≤ 50 V</h4><p>Τηλεφωνικές εγκαταστάσεις, φωτεινές και ακουστικές σημάνσεις, κυκλώματα ελέγχου ρελέ και μετρητών κάτω των 50 V.</p></div>
+    <div class="min-card"><div class="size">0,75 mm²</div><h4>Κρεμαστός αγωγός</h4><p>Τροφοδότηση ξεχωριστών λαμπτήρων και ηλεκτρικών συσκευών.</p></div>
+    <div class="min-card"><div class="size">1,5 mm²</div><h4>Αγωγοί διακλάδωσης</h4><p>Ξεχωριστές συσκευές φωτισμού ή ξεχωριστές λήψεις πριζών με ονομαστική δυναμικότητα μικρότερη από 16 A.</p></div>
+    <div class="min-card"><div class="size">2,5 mm²</div><h4>Ξεχωριστή γραμμή πριζών</h4><p>Για ξεχωριστή γραμμή πριζών.</p></div>
+    <div class="min-card"><div class="size">4 mm²</div><h4>Δευτερεύουσα διακλάδωση</h4><p>Περισσότερες από μία λήψεις 16 A ή σταθερές συσκευές κατανάλωσης. Επίσης, για τροφοδότηση λήψης από 2,5 A και πάνω, όπως αναφέρεται στο βιβλίο.</p></div>
+    <div class="min-card"><div class="size">6 mm²</div><h4>Κύρια διακλάδωση</h4><p>Η μικρότερη αποδεκτή διατομή που αναφέρει ο πίνακας για την κύρια διακλάδωση.</p></div>
+  </div>
+  <div class="note good"><strong>Βασικός κανόνας:</strong> Όταν περνάμε από μεγάλες σε μικρές διατομές, χρειάζεται προστασία των μικρών διατομών με ασφάλειες ή αυτόματους διακόπτες.</div>
+</section>
+
+<section id="practice" class="panel">
+  <div class="section-head"><div class="eyebrow">Εξάσκηση</div><h2>Έλεγξε τι κατάλαβες</h2><p>26 ερωτήσεις βασισμένες αποκλειστικά στα δεδομένα των κεφαλαίων 2.3 και 2.4 του βιβλίου.</p></div>
+  <div class="quiz-part"><h3><span>Α</span> Θεωρία</h3><div class="q-list" id="partA"></div></div>
+  <div class="quiz-part"><h3><span>Β</span> Πίνακες και υπολογισμοί</h3><div class="q-list" id="partB"></div></div>
+  <div class="quiz-part"><h3><span>Γ</span> Μικρότερες διατομές</h3><div class="q-list" id="partC"></div></div>
+  <div class="quiz-part"><h3><span>Δ</span> Εφαρμογές</h3><div class="q-list" id="partD"></div></div>
+  <div class="quiz-footer"><div class="score">Βαθμολογία: <strong id="scoreText">— / 26</strong></div><div class="progress"><span id="progressBar"></span></div><div><button class="btn orange" id="checkQuiz">Έλεγχος απαντήσεων</button> <button class="btn secondary" id="resetQuiz">Νέα προσπάθεια</button></div></div>
+</section>
+
+<section id="recap" class="panel">
+  <div class="section-head"><div class="eyebrow">Ανακεφαλαίωση</div><h2>Τα βασικά σε μία σελίδα</h2><p>Όσα πρέπει να θυμάται ο μαθητής από τα κεφάλαια 2.3 και 2.4.</p></div>
+  <div class="grid four">
+    <div class="card"><h3>1</h3><p>Η επιτρεπόμενη ένταση εξαρτάται από τη διατομή, το είδος της μόνωσης και τις συνθήκες τοποθέτησης και λειτουργίας.</p></div>
+    <div class="card"><h3>2</h3><p>Η θερμότητα δίνεται από τη σχέση Q = I²Rt. Η αύξηση της έντασης αυξάνει σημαντικά τη θέρμανση.</p></div>
+    <div class="card"><h3>3</h3><p>Η υψηλή θερμοκρασία και οι πολλοί ενεργοί αγωγοί μειώνουν τη μέγιστη επιτρεπόμενη ένταση.</p></div>
+    <div class="card"><h3>4</h3><p>Οι μικρότερες διατομές του Πίνακα 2.4α κυμαίνονται από 0,5 mm² έως 6 mm² ανάλογα με τη χρήση.</p></div>
+  </div>
+  <div class="note"><strong>Τελικό σημείο:</strong> όταν η εγκατάσταση περνά από μεγαλύτερη σε μικρότερη διατομή, η μικρότερη διατομή πρέπει να προστατεύεται με ασφάλεια ή αυτόματο διακόπτη.</div>
+</section>
+</main>
+<div class="footer-note">Εκπαιδευτικό υλικό παρουσίασης και εξάσκησης • Κεφάλαια 2.3 και 2.4 • Περιεχόμενο αποκλειστικά από το σχολικό βιβλίο</div>
+</div>
+<script>
+const panels=[...document.querySelectorAll('.panel')],nav=[...document.querySelectorAll('.nav button')];
+function show(id){panels.forEach(p=>p.classList.toggle('active',p.id===id));nav.forEach(b=>b.classList.toggle('active',b.dataset.page===id));window.scrollTo({top:0,behavior:'smooth'})}
+nav.forEach(b=>b.addEventListener('click',()=>show(b.dataset.page)));document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.go)));
+function num(v){return Number(String(v).replace(',','.'))}function fmt(v){return new Intl.NumberFormat('el-GR',{maximumFractionDigits:3}).format(v)}
+function calcCurrent(){const b=num(document.getElementById('baseCurrent').value),t=num(document.getElementById('tempFactor').value),c=num(document.getElementById('conductorFactor').value),r=b*t*c;document.getElementById('currentResult').textContent=Number.isFinite(r)?`${fmt(b)} × ${fmt(t)} × ${fmt(c)} = ${fmt(r)} A`:'Έλεγξε τις τιμές.'}
+document.getElementById('calcCurrent').addEventListener('click',calcCurrent);
+
+const partA=[
+ {q:'Τι μπορεί να συμβεί αν ξεπεραστεί η μέγιστη επιτρεπόμενη ένταση ενός μονωμένου αγωγού;',o:['Μειώνεται η αντίσταση χωρίς άλλη συνέπεια','Φθείρεται η μόνωση και μπορεί να προκληθούν βραχυκυκλώματα και πυρκαγιά','Αυξάνεται η διατομή','Μειώνεται η θερμοκρασία'],a:1},
+ {q:'Από πόσους βασικούς παράγοντες εξαρτάται, σύμφωνα με το βιβλίο, η μέγιστη επιτρεπόμενη ένταση;',o:['Έναν','Δύο','Τρεις','Πέντε'],a:2},
+ {q:'Ποιος από τους παρακάτω ΔΕΝ αναφέρεται στους τρεις βασικούς παράγοντες;',o:['Διατομή','Είδος μόνωσης','Συνθήκες τοποθέτησης και λειτουργίας','Χρώμα του αγωγού'],a:3},
+ {q:'Ποια σχέση εκφράζει το φαινόμενο Τζάουλ;',o:['Q = I²Rt','R = U/I μόνο','P = U/I','Q = R/t'],a:0},
+ {q:'Όταν αυξάνεται η ένταση του ρεύματος, η εκλυόμενη θερμότητα:',o:['Μειώνεται','Παραμένει ίδια','Αυξάνεται','Μηδενίζεται'],a:2},
+ {q:'Όσο μικρότερη είναι η διατομή ενός αγωγού, τόσο:',o:['Μικρότερη είναι η αντίστασή του','Υψηλότερη θερμοκρασία μπορεί να αναπτυχθεί','Μικρότερο είναι πάντα το μήκος του','Καλύτερη είναι η ψύξη του'],a:1},
+ {q:'Περίπου μέχρι ποια θερμοκρασία αντέχει η συνηθισμένη μόνωση PVC, σύμφωνα με το βιβλίο;',o:['40°C','60°C','70°C','180°C'],a:2},
+ {q:'Ενεργοί αγωγοί ονομάζονται:',o:['Μόνο οι αγωγοί γείωσης','Οι αγωγοί που διαρρέονται από ρεύμα','Μόνο οι ουδέτεροι','Μόνο οι γυμνοί αγωγοί'],a:1}
+];
+const partB=[
+ {q:'Για διατομή 1,5 mm² στην 1η Ομάδα, ο Πίνακας 2.3α δίνει:',o:['14 A','16 A','20 A','25 A'],a:1},
+ {q:'Για διατομή 2,5 mm² στη 2η Ομάδα, η επιτρεπόμενη ένταση είναι:',o:['21 A','25 A','27 A','34 A'],a:2},
+ {q:'Για διατομή 6 mm² στην 3η Ομάδα, η επιτρεπόμενη ένταση είναι:',o:['35 A','47 A','57 A','65 A'],a:2},
+ {q:'Για αγωγό 10 mm² της 1ης Ομάδας στους 30°C, ο Πίνακας 2.3β δίνει:',o:['33 A','43 A','48 A','65 A'],a:1},
+ {q:'Ποιος είναι ο συντελεστής διόρθωσης στους 50°C;',o:['0,91','0,82','0,58','0,41'],a:2},
+ {q:'Ποιος είναι ο συντελεστής για 4–6 ενεργούς αγωγούς;',o:['1','0,9','0,8','0,7'],a:2}
+];
+const partC=[
+ {q:'Η μικρότερη διατομή για κυκλώματα τάσης ≤ 50 V είναι:',o:['0,5 mm²','0,75 mm²','1,5 mm²','2,5 mm²'],a:0},
+ {q:'Η μικρότερη διατομή κρεμαστού αγωγού είναι:',o:['0,5 mm²','0,75 mm²','1 mm²','1,5 mm²'],a:1},
+ {q:'Για ξεχωριστές συσκευές φωτισμού ή ξεχωριστές λήψεις πριζών κάτω των 16 A αναφέρεται:',o:['0,75 mm²','1,5 mm²','2,5 mm²','4 mm²'],a:1},
+ {q:'Για γραμμή φωτισμού μαζί με πρίζες, ποια διατομή επιλέγουμε;',o:['1 mm²','1,5 mm²','2,5 mm²','6 mm²'],a:1},
+ {q:'Για ξεχωριστή γραμμή πριζών, ποια διατομή επιλέγουμε;',o:['1,5 mm²','2,5 mm²','4 mm²','6 mm²'],a:1},
+ {q:'Για την κύρια διακλάδωση αναφέρεται:',o:['2,5 mm²','4 mm²','6 mm²','10 mm²'],a:2}
+];
+const partD=[
+ {q:'Καλώδιο 1ης Ομάδας βρίσκεται σε χώρο 50°C. Για τη διόρθωση της έντασης χρησιμοποιούμε:',o:['Συντελεστή 1','Συντελεστή 0,91','Συντελεστή 0,58','Συντελεστή 0,7'],a:2},
+ {q:'Έχουμε 8 ενεργούς αγωγούς στο ίδιο περίβλημα. Ο συντελεστής είναι:',o:['1','0,8','0,7','0,41'],a:2},
+ {q:'Αν συνυπάρχουν θερμοκρασία πάνω από 30°C και περισσότεροι από 3 ενεργοί αγωγοί:',o:['Χρησιμοποιείται μόνο ο μεγαλύτερος συντελεστής','Οι δύο συντελεστές προστίθενται','Οι δύο συντελεστές πολλαπλασιάζονται','Δεν γίνεται διόρθωση'],a:2},
+ {q:'Επιτρέπεται να τοποθετούνται στον ίδιο σωλήνα αγωγοί 230 V και αγωγοί τηλεφώνου;',o:['Ναι, πάντα','Ναι, μόνο αν είναι χάλκινοι','Όχι','Μόνο σε ορατή εγκατάσταση'],a:2},
+ {q:'Όταν περνάμε από μεγάλη σε μικρή διατομή, η μικρή διατομή πρέπει:',o:['Να παραμένει χωρίς προστασία','Να προστατεύεται με ασφάλεια ή αυτόματο διακόπτη','Να τοποθετείται μόνο στον αέρα','Να είναι πάντα 0,5 mm²'],a:1},
+ {q:'Σε θερμαινόμενο χώρο, η οριζόντια πορεία προστατευτικού σωλήνα έχει κλίση:',o:['0,5%','1%','2%','5%'],a:2}
+];
+function renderPart(data,id,prefix){const root=document.getElementById(id);root.innerHTML='';data.forEach((x,i)=>{const d=document.createElement('div');d.className='question';d.dataset.answer=x.a;d.dataset.group=prefix;d.innerHTML=`<div class="q-title">${i+1}. ${x.q}</div><div class="choices">${x.o.map((v,j)=>`<label><input type="radio" name="${prefix}_${i}" value="${j}"><span>${v}</span></label>`).join('')}</div><div class="feedback"></div>`;root.appendChild(d)})}
+renderPart(partA,'partA','A');renderPart(partB,'partB','B');renderPart(partC,'partC','C');renderPart(partD,'partD','D');
+function allQuestions(){return [...document.querySelectorAll('.question')]}
+function checkQuiz(){let score=0;const qs=allQuestions();qs.forEach(q=>{q.classList.remove('correct','wrong');const chosen=q.querySelector('input:checked'),fb=q.querySelector('.feedback'),ans=Number(q.dataset.answer);if(chosen&&Number(chosen.value)===ans){score++;q.classList.add('correct');fb.className='feedback ok';fb.textContent='Σωστό.'}else{q.classList.add('wrong');fb.className='feedback no';const labels=[...q.querySelectorAll('.choices label span')];fb.textContent=`Σωστή απάντηση: ${labels[ans].textContent}`}});document.getElementById('scoreText').textContent=`${score} / ${qs.length}`;document.getElementById('progressBar').style.width=`${score/qs.length*100}%`}
+function resetQuiz(){allQuestions().forEach(q=>{q.classList.remove('correct','wrong');q.querySelectorAll('input').forEach(i=>i.checked=false);const fb=q.querySelector('.feedback');fb.textContent='';fb.className='feedback'});document.getElementById('scoreText').textContent='— / 26';document.getElementById('progressBar').style.width='0%'}
+document.getElementById('checkQuiz').addEventListener('click',checkQuiz);document.getElementById('resetQuiz').addEventListener('click',resetQuiz);
+</script>
+</body>
+</html>
